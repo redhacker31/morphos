@@ -1,9 +1,9 @@
-import { runAIGeneratorTestSuite } from "../features/ai-generator/__tests__/aiGenerator.test";
-import { runGoldenAstSnapshotsTest } from "../features/ai-generator/__tests__/goldenAstSnapshots.test";
-import { EvalBenchmarkEngine } from "../features/ai-generator/library/evalBenchmark";
-import { runAIEvolutionTestSuite } from "../features/ai-evolution/__tests__/aiEvolution.test";
-import { runCollaborationTestSuite } from "../features/collaboration/__tests__/collaboration.test";
-import { runMultiAgentTestSuite } from "../features/multi-agent/__tests__/multiAgent.test";
+import { runAIGeneratorTestSuite } from "../morphos-app/features/ai-generator/__tests__/aiGenerator.test";
+import { runGoldenAstSnapshotsTest } from "../morphos-app/features/ai-generator/__tests__/goldenAstSnapshots.test";
+import { EvalBenchmarkEngine } from "../morphos-app/features/ai-generator/library/evalBenchmark";
+import { runAIEvolutionTestSuite } from "../morphos-app/features/ai-evolution/__tests__/aiEvolution.test";
+import { runCollaborationTestSuite } from "../morphos-app/features/collaboration/__tests__/collaboration.test";
+import { runMultiAgentTestSuite } from "../morphos-app/features/multi-agent/__tests__/multiAgent.test";
 
 async function main() {
   console.log("=== Phase 3: AI Generation Engine Test Suite ===");
@@ -63,7 +63,7 @@ async function main() {
     multiAgentResults.passed;
 
   if (allPassed) {
-    console.log("\nSUCCESS: All Phase 3, 4, 5, & 6 MorphOS Engine tests passed cleanly!");
+    console.log("\nSUCCESS: All Phase 3, 4, 5, & 6 MorphOS Monorepo Engine tests passed cleanly!");
     process.exit(0);
   } else {
     console.error("\nFAILURE: Test failures detected.");
