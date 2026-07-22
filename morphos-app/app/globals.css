@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+/* ============================================
+   MorphOS Design System
+   Describe. Generate. Evolve.
+   ============================================ */
+
+:root {
+  /* ============================================
+     COLOR SYSTEM
+     ============================================ */
+  --primary: #8B5CF6;
+  --secondary: #06B6D4;
+  --accent: #A855F7;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  
+  --background: #09090B;
+  --surface: #111118;
+  --surface-elevated: #18181F;
+  
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.08);
+  
+  --glass: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.12);
+  
+  /* Text */
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+
+  /* State overlays (Hover/Focus) */
+  --hover-overlay: rgba(255,255,255,0.04);
+  --active-overlay: rgba(255,255,255,0.08);
+
+  /* ============================================
+     SPACING SYSTEM
+     ============================================ */
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+
+  /* ============================================
+     RADIUS SYSTEM
+     ============================================ */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* Standard radix/shadcn mapped radius */
+  --radius: var(--radius-lg);
+
+  /* ============================================
+     SHADOW SYSTEM (RGB values for Tailwind)
+     ============================================ */
+  --shadow-color: 0, 0, 0;
+  --glow-purple: 139, 92, 246;
+  --glow-cyan: 6, 182, 212;
+  --glow-success: 34, 197, 94;
+  --glow-error: 239, 68, 68;
+
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modalBackdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+/* ============================================
+   TYPOGRAPHY BASE STYLES
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings Base Font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
+   FOCUS & ACCESSIBILITY
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   ANIMATIONS & KEYFRAMES (Globally injected)
+   ============================================ */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
