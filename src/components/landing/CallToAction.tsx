@@ -34,7 +34,7 @@ export function CallToAction() {
               </p>
 
               <Link
-                href="/workspace/new"
+                to="/workspace/new"
                 className="btn-primary text-base px-8 py-3.5 group inline-flex"
               >
                 Launch Workspace

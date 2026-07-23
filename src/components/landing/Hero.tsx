@@ -91,7 +91,7 @@ export function Hero() {
             {/* Bottom Generate Button */}
             <div className="flex justify-end pt-8">
               <Link
-                href="/workspace/new"
+                to="/workspace/new"
                 className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white font-extrabold text-sm sm:text-base flex items-center gap-2.5 shadow-[0_0_25px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
               >
                 <Wand2 size={18} />

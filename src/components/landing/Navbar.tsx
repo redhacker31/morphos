@@ -67,7 +67,7 @@ export function Navbar() {
 
           {/* User Profile Circle */}
           <Link
-            href="/workspace/new"
+            to="/workspace/new"
             aria-label="User Workspace Profile"
             className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white border border-white/20 hover:scale-105 transition-transform cursor-pointer shadow-md"
           >
