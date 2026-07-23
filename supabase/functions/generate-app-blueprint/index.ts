@@ -111,7 +111,7 @@ function extractJson(text: string): any {
   if (first !== -1 && last !== -1 && last > first) t = t.slice(first, last + 1);
   try {
     return JSON.parse(t);
-  } catch (e) {
+  } catch {
     throw new Error("The AI response was not valid JSON. Please try rephrasing your request.");
   }
 }
@@ -139,7 +139,7 @@ async function callChatCompletions(messages: any[]): Promise<string> {
   const res = await fetch(`${API_BASE}/code/api/v1/ai/chat/completions`, {
     method: "POST",
     headers: { Authorization: `Bearer ${AI_API_TOKEN}`, "Content-Type": "application/json", "X-Session-ID": crypto.randomUUID() },
-    body: JSON.stringify({ model: MODEL, messages, stream: false, temperature: 0.5 }),
+    body: JSON.stringify({ model: MODEL, messages, stream: false }),
   });
   if (!res.ok) {
     const text = await res.text();
@@ -157,7 +157,7 @@ async function callResponses(messages: any[]): Promise<string> {
   const res = await fetch(`${API_BASE}/code/api/v1/ai/responses`, {
     method: "POST",
     headers: { Authorization: `Bearer ${AI_API_TOKEN}`, "Content-Type": "application/json", "X-Session-ID": crypto.randomUUID() },
-    body: JSON.stringify({ model: MODEL, input, stream: false, temperature: 0.5 }),
+    body: JSON.stringify({ model: MODEL, input, stream: false }),
   });
   if (!res.ok) {
     const text = await res.text();

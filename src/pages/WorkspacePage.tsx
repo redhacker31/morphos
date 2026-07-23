@@ -19,7 +19,7 @@ import { usePromptHistory } from "@/hooks/usePromptHistory";
 import { useSession } from "@/hooks/useSession";
 import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Layers, Play, Eye } from "lucide-react";
+import { MessageSquare, Layers, Play, Eye, AlertCircle, X } from "lucide-react";
 
 // Fallback sample AST shown when no generated app is loaded yet.
 const SAMPLE_SALES_AST = {
@@ -114,6 +114,7 @@ export default function WorkspacePage() {
   const [showRendererDemo, setShowRendererDemo] = useState(false);
   const [activeAst, setActiveAst] = useState<AppASTPayload | null>(null);
   const [prompt, setPrompt] = useState("");
+  const [genError, setGenError] = useState<string | null>(null);
 
   const workspaceTitle = id === "new" ? "New Workspace" : `Workspace / ${id}`;
 
@@ -141,6 +142,7 @@ export default function WorkspacePage() {
   const handleGenerate = async (promptText: string) => {
     const res = await ai.generate(promptText);
     if (res.success && res.ast) {
+      setGenError(null);
       setActiveAst(res.ast);
       setShowRendererDemo(true);
       // Persist the generated app + prompt (ownership is set server-side).
@@ -160,6 +162,8 @@ export default function WorkspacePage() {
       } catch (e) {
         console.warn("Failed to save prompt", e);
       }
+    } else {
+      setGenError(res.errors[0] || "Generation failed. Please try again.");
     }
   };
 
@@ -221,6 +225,24 @@ export default function WorkspacePage() {
                   <span>{showRendererDemo ? "Hide Preview" : "Preview Blueprint"}</span>
                 </button>
               </div>
+
+              {/* Generation Error Banner */}
+              {genError && (
+                <div className="rounded-2xl border border-red-500/40 bg-red-500/10 p-4 flex items-start gap-3 backdrop-blur-xl">
+                  <AlertCircle size={18} className="text-red-400 shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold text-white">Generation failed</h4>
+                    <p className="text-[11px] text-red-300/90 break-words">{genError}</p>
+                  </div>
+                  <button
+                    onClick={() => setGenError(null)}
+                    className="text-red-400 hover:text-white transition-colors shrink-0"
+                    aria-label="Dismiss error"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              )}
 
               {/* Prompt Studio Input Box */}
               <div className="pt-2">

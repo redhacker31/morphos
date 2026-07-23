@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PromptParser } from "../pipeline/promptParser";
 import { ASTRepairEngine } from "../pipeline/astRepairEngine";
-import { sb } from "@/lib/db";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import type {
   AIGenerationResult,
   GenerationProgress,
@@ -12,8 +12,9 @@ const MODEL = "openai/gpt-5.6-luna";
 
 /**
  * useAIGenerator - React hook that connects the prompt studio to the real
- * AI blueprint backend function. Keeps the staged progress UI and runs the
- * client-side AST repair engine for defense-in-depth validation.
+ * AI blueprint backend function. Calls the function directly (rather than via
+ * the SDK wrapper) so the backend's real error message surfaces to the user.
+ * Keeps the staged progress UI and runs the client-side AST repair engine.
  */
 export function useAIGenerator() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -49,9 +50,7 @@ export function useAIGenerator() {
       message: "Generating application blueprint with AI...",
     });
 
-    const fail = (
-      message: string
-    ): AIGenerationResult => ({
+    const fail = (message: string): AIGenerationResult => ({
       success: false,
       ast: null,
       requirements: reqs,
@@ -76,14 +75,23 @@ export function useAIGenerator() {
 
     let genResult: AIGenerationResult;
     try {
-      const { data, error } = await sb.functions.invoke(
-        "generate-app-blueprint",
-        { body: { prompt: promptText, requirements: reqs } }
+      const res = await fetch(
+        `${SUPABASE_URL}/functions/v1/generate-app-blueprint`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ prompt: promptText, requirements: reqs }),
+        }
       );
 
-      if (error || !data?.success || !data?.ast) {
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.success || !data?.ast) {
         const message =
-          error?.message || data?.errors?.[0] || "Generation failed. Please try again.";
+          data?.errors?.[0] || `Generation failed (HTTP ${res.status}).`;
         genResult = fail(message);
       } else {
         const repair = ASTRepairEngine.repair(data.ast);
@@ -125,7 +133,9 @@ export function useAIGenerator() {
         };
       }
     } catch (e) {
-      genResult = fail(e instanceof Error ? e.message : "Network error contacting AI.");
+      genResult = fail(
+        e instanceof Error ? e.message : "Network error contacting AI."
+      );
     }
 
     setResult(genResult);
