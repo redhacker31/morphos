@@ -13,6 +13,8 @@ interface AppShellProps {
   onViewChange: (view: string) => void;
   onSelectTemplate?: (templateId: string) => void;
   workspaceTitle?: string;
+  userId?: string | null;
+  onSignOut?: () => void;
 }
 
 export function AppShell({
@@ -21,6 +23,8 @@ export function AppShell({
   onViewChange,
   onSelectTemplate,
   workspaceTitle = "Main Studio",
+  userId,
+  onSignOut,
 }: AppShellProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
@@ -54,6 +58,7 @@ export function AppShell({
         onViewChange={onViewChange}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        userId={userId}
       />
 
       {/* Main Content Area */}
@@ -62,6 +67,8 @@ export function AppShell({
         <TopNav
           projectName={workspaceTitle}
           onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+          userId={userId}
+          onSignOut={onSignOut}
         />
 
         {/* Dynamic Workspace Canvas / Content Slot */}

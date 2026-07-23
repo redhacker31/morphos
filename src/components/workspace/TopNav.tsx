@@ -28,13 +28,17 @@ import {
 interface TopNavProps {
   projectName?: string;
   onOpenCommandPalette?: () => void;
+  userId?: string | null;
+  onSignOut?: () => void;
 }
 
 export default function TopNav({
   projectName = "Main Studio",
   onOpenCommandPalette,
+  userId,
+  onSignOut,
 }: TopNavProps) {
-  const [activeWorkspace, setActiveWorkspace] = useState("Acme Corp SaaS");
+  const shortId = userId ? userId.slice(0, 8) : "guest";
   const [showNotifications, setShowNotifications] = useState(false);
   const [themeMode, setThemeMode] = useState<"dark" | "light">("dark");
 
@@ -142,7 +146,7 @@ export default function TopNav({
             <button className="flex items-center gap-2 hover:opacity-85 transition-opacity cursor-pointer">
               <Avatar className="w-8 h-8 border border-white/20 rounded-xl">
                 <AvatarFallback className="bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] text-white text-xs font-extrabold rounded-xl">
-                  AK
+                  G
                 </AvatarFallback>
               </Avatar>
             </button>
@@ -152,13 +156,16 @@ export default function TopNav({
             className="w-52 bg-[var(--surface-elevated)] border border-white/15 text-white text-xs p-1"
           >
             <div className="px-3 py-2 border-b border-white/10">
-              <div className="font-bold text-white">Akhil</div>
-              <div className="text-[10px] text-[var(--text-muted)]">Lead Architect</div>
+              <div className="font-bold text-white">Guest</div>
+              <div className="text-[10px] text-[var(--text-muted)] font-mono">anon · {shortId}</div>
             </div>
             <DropdownMenuItem className="cursor-pointer focus:bg-white/10 rounded-lg">Workspace Settings</DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer focus:bg-white/10 rounded-lg">Design System Tokens</DropdownMenuItem>
             <DropdownMenuSeparator className="bg-white/10" />
-            <DropdownMenuItem className="cursor-pointer focus:bg-red-500/10 text-red-400 rounded-lg">
+            <DropdownMenuItem
+              className="cursor-pointer focus:bg-red-500/10 text-red-400 rounded-lg"
+              onSelect={() => onSignOut?.()}
+            >
               Sign Out
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -70,6 +70,7 @@ interface SidebarProps {
   onViewChange: (view: string) => void;
   collapsed: boolean;
   onToggleCollapse: () => void;
+  userId?: string | null;
 }
 
 export default function Sidebar({
@@ -77,7 +78,9 @@ export default function Sidebar({
   onViewChange,
   collapsed,
   onToggleCollapse,
+  userId,
 }: SidebarProps) {
+  const shortId = userId ? userId.slice(0, 8) : "guest";
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     "AI Studio": true,
     "Library": true,
@@ -238,15 +241,15 @@ export default function Sidebar({
           >
             <div className="relative shrink-0">
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] flex items-center justify-center text-white font-bold text-sm shadow-[0_0_12px_rgba(139,92,246,0.4)]">
-                A
+                G
               </div>
               <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[var(--success)] border-2 border-[#0F0F12] shadow-[0_0_8px_var(--success-glow)]" />
             </div>
             {!collapsed && (
-              <div className="flex-grow min-w-0">
-                <div className="text-xs font-bold text-white truncate">Akhil</div>
-                <div className="text-[10px] text-[var(--text-muted)] truncate">Lead Architect</div>
-              </div>
+            <div className="flex-grow min-w-0">
+              <div className="text-xs font-bold text-white truncate">Guest</div>
+              <div className="text-[10px] text-[var(--text-muted)] truncate font-mono">anon · {shortId}</div>
+            </div>
             )}
             {!collapsed && (
               <div className="opacity-0 group-hover:opacity-100 transition-opacity">

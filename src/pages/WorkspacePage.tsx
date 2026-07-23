@@ -8,7 +8,7 @@ import TemplateGallery from "@/components/workspace/TemplateGallery";
 import PromptHistory from "@/components/workspace/PromptHistory";
 import SettingsPanel from "@/components/workspace/SettingsPanel";
 import ChatPanel from "@/components/workspace/ChatPanel";
-import { QuickStart } from "@/components/workspace/QuickStart";
+import { QuickStart, TEMPLATE_CARDS } from "@/components/workspace/QuickStart";
 import { RecentProjects } from "@/components/workspace/RecentProjects";
 import { EmptyWorkspace } from "@/components/workspace/EmptyWorkspace";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -17,6 +17,8 @@ import { useAIGenerator } from "@/features/ai-generator/hooks/useAIGenerator";
 import { useProjects } from "@/hooks/useProjects";
 import { usePromptHistory } from "@/hooks/usePromptHistory";
 import { useSession } from "@/hooks/useSession";
+import { supabase } from "@/integrations/supabase/client";
+import { mockTemplates } from "@/lib/mock-data";
 import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Layers, Play, Eye, AlertCircle, X } from "lucide-react";
@@ -99,10 +101,25 @@ const SAMPLE_SALES_AST = {
   ],
 };
 
+// Map template ids (from QuickStart cards + Template Gallery) to generation
+// prompts so "Use Template" generates a real app via the AI backend.
+const TEMPLATE_PROMPTS: Record<string, string> = {};
+TEMPLATE_CARDS.forEach((t) => {
+  TEMPLATE_PROMPTS[t.id] = `Build a ${t.title}. ${t.desc}`;
+});
+mockTemplates.forEach((t) => {
+  TEMPLATE_PROMPTS[t.id] = `Build a ${t.title}. ${t.description}`;
+});
+const FALLBACK_PROMPT =
+  "Build a polished operational dashboard with a hero banner, three KPI metric cards, a revenue trend bar chart, a market distribution chart, and a records data table.";
+function promptForTemplate(id: string): string {
+  return TEMPLATE_PROMPTS[id] || FALLBACK_PROMPT;
+}
+
 export default function WorkspacePage() {
   const { id = "new" } = useParams<{ id: string }>();
 
-  const { ready } = useSession();
+  const { ready, userId } = useSession();
   const ai = useAIGenerator();
   const projectsHook = useProjects(ready);
   const historyHook = usePromptHistory(ready);
@@ -126,18 +143,6 @@ export default function WorkspacePage() {
       </div>
     );
   }
-
-  const handleSelectTemplate = (_templateId: string) => {
-    setShowTemplatesModal(false);
-    setShowRendererDemo(true);
-    setActiveView("workspace");
-  };
-
-  const handleOpenProject = (project: { id: string; ast: unknown }) => {
-    setActiveAst(project.ast as AppASTPayload);
-    setShowRendererDemo(true);
-    setActiveView("workspace");
-  };
 
   const handleGenerate = async (promptText: string) => {
     const res = await ai.generate(promptText);
@@ -167,12 +172,33 @@ export default function WorkspacePage() {
     }
   };
 
+  const handleSelectTemplate = (templateId: string) => {
+    setShowTemplatesModal(false);
+    setActiveView("workspace");
+    const promptText = promptForTemplate(templateId);
+    setPrompt(promptText);
+    void handleGenerate(promptText);
+  };
+
+  const handleOpenProject = (project: { id: string; ast: unknown }) => {
+    setActiveAst(project.ast as AppASTPayload);
+    setShowRendererDemo(true);
+    setActiveView("workspace");
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
+
   return (
     <AppShell
       activeView={activeView}
       onViewChange={setActiveView}
       onSelectTemplate={handleSelectTemplate}
       workspaceTitle={workspaceTitle}
+      userId={userId}
+      onSignOut={handleSignOut}
     >
       <div className="flex flex-1 h-full overflow-hidden relative">
         {/* Workspace Surface Host */}

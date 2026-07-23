@@ -108,10 +108,10 @@ export default function SettingsPanel() {
 
         <Separator className="bg-[var(--card-border)]" />
 
-        {/* Demo Mode */}
-        <SettingsSection icon={Monitor} title="Demo Mode">
-          <SettingsRow label="Demo Mode" description="Use mock data for presentations">
-            <Switch defaultChecked className="data-[state=checked]:bg-[var(--primary)]" />
+        {/* Backend */}
+        <SettingsSection icon={Monitor} title="Backend">
+          <SettingsRow label="Live Backend" description="Real database, auth & AI generation">
+            <Switch defaultChecked disabled className="data-[state=checked]:bg-[var(--primary)]" />
           </SettingsRow>
         </SettingsSection>
 
@@ -130,7 +130,7 @@ export default function SettingsPanel() {
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-[var(--text-secondary)]">Backend</span>
-              <span className="text-[var(--text-primary)] font-mono text-xs">Convex</span>
+              <span className="text-[var(--text-primary)] font-mono text-xs">Enter Cloud</span>
             </div>
             <a
               href="#"
