@@ -3360,7 +3360,99 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          ast: Json
+          created_at: string
+          domain: string | null
+          id: string
+          is_favorite: boolean
+          node_count: number
+          prompt: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ast?: Json
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_favorite?: boolean
+          node_count?: number
+          prompt?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ast?: Json
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_favorite?: boolean
+          node_count?: number
+          prompt?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      prompt_history: {
+        Row: {
+          created_at: string
+          favorited: boolean
+          id: string
+          pinned: boolean
+          text: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          favorited?: boolean
+          id?: string
+          pinned?: boolean
+          text: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          favorited?: boolean
+          id?: string
+          pinned?: boolean
+          text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

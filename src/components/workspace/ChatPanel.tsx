@@ -1,10 +1,38 @@
-
-import React, { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, User, Send, Sparkles, X } from "lucide-react";
+import { Bot, User, Send, Sparkles, X, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockChatMessages, type ChatMessage } from "@/lib/mock-data";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
+import { useSession } from "@/hooks/useSession";
+import { sb } from "@/lib/db";
+
+interface ChatMessage {
+  id: string;
+  role: "ai" | "user";
+  content: string;
+  timestamp: string;
+  streaming?: boolean;
+}
+
+const WELCOME: ChatMessage = {
+  id: "welcome",
+  role: "ai",
+  content:
+    "Welcome to MorphOS! Describe the app you want to build and I'll help you plan it. Try: \"A sales CRM dashboard with revenue KPIs, a pipeline chart, and a deals table.\"",
+  timestamp: "Just now",
+};
+
+function relTime(iso?: string): string {
+  if (!iso) return "Just now";
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "Just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
 
 interface ChatPanelProps {
   isOpen: boolean;
@@ -12,10 +40,38 @@ interface ChatPanelProps {
 }
 
 export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>(mockChatMessages);
+  const { ready } = useSession();
+  const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sessionIdRef = useRef<string>(
+    `morphos-${Math.random().toString(36).slice(2)}`
+  );
+  const abortRef = useRef<AbortController | null>(null);
+
+  // Load conversation history from the backend.
+  useEffect(() => {
+    if (!ready) return;
+    (async () => {
+      const { data } = await sb
+        .from("chat_messages")
+        .select("*")
+        .order("created_at", { ascending: true })
+        .limit(50);
+      if (data && data.length) {
+        setMessages(
+          data.map((r: any) => ({
+            id: r.id,
+            role: r.role as "ai" | "user",
+            content: r.content,
+            timestamp: relTime(r.created_at),
+          }))
+        );
+      }
+    })();
+  }, [ready]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -23,30 +79,123 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
     }
   }, [messages, isTyping]);
 
-  const handleSend = () => {
-    if (!input.trim() || isTyping) return;
+  const handleSend = async () => {
+    const text = input.trim();
+    if (!text || isTyping) return;
+    setInput("");
+    setError(null);
 
     const userMsg: ChatMessage = {
-      id: `msg-${Date.now()}`,
+      id: `u-${Date.now()}`,
       role: "user",
-      content: input,
+      content: text,
       timestamp: "Just now",
     };
-
     setMessages((prev) => [...prev, userMsg]);
-    setInput("");
+    // Persist the user's message (ownership set server-side by trigger).
+    void sb.from("chat_messages").insert({ role: "user", content: text });
+
+    const aiId = `a-${Date.now()}`;
+    const aiMsg: ChatMessage = {
+      id: aiId,
+      role: "ai",
+      content: "",
+      timestamp: "Just now",
+      streaming: true,
+    };
+    setMessages((prev) => [...prev, aiMsg]);
     setIsTyping(true);
 
-    setTimeout(() => {
-      const aiMsg: ChatMessage = {
-        id: `msg-${Date.now() + 1}`,
-        role: "ai",
-        content: "I've noted your request. In the next phase, I'll be able to generate and modify your application in real-time. For now, explore the workspace!",
-        timestamp: "Just now",
-      };
-      setMessages((prev) => [...prev, aiMsg]);
+    const history = [...messages.filter((m) => m.id !== "welcome"), userMsg].map(
+      (m) => ({
+        role: m.role === "ai" ? "assistant" : "user",
+        content: m.content,
+      })
+    );
+
+    abortRef.current = new AbortController();
+    let acc = "";
+    try {
+      await fetchEventSource(`${SUPABASE_URL}/functions/v1/copilot-chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+          "X-Session-ID": sessionIdRef.current,
+        },
+        body: JSON.stringify({ messages: history }),
+        signal: abortRef.current.signal,
+        openWhenHidden: true,
+
+        async onopen(res) {
+          if (!res.ok) {
+            const ct = res.headers.get("content-type") || "";
+            let msg = `Request failed: ${res.status}`;
+            if (ct.includes("text/event-stream")) {
+              const t = await res.text();
+              const m = t.match(/data: (.+)/);
+              if (m) {
+                let parsed: { message?: string } | null = null;
+                try {
+                  parsed = JSON.parse(m[1]);
+                } catch {
+                  parsed = null;
+                }
+                if (parsed?.message) msg = parsed.message;
+              }
+            } else if (ct.includes("application/json")) {
+              const e = await res.json().catch(() => null);
+              if (e?.error?.message) msg = e.error.message;
+            }
+            throw new Error(msg);
+          }
+        },
+
+        onmessage(ev) {
+          if (!ev.data) return;
+          let d: any;
+          try {
+            d = JSON.parse(ev.data);
+          } catch {
+            return;
+          }
+          if (ev.event === "delta" && typeof d.content === "string") {
+            acc += d.content;
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === aiId ? { ...m, content: acc, streaming: true } : m
+              )
+            );
+          } else if (ev.event === "error") {
+            setError(d.message || "AI error");
+          }
+        },
+
+        onerror(err) {
+          throw err;
+        },
+      });
+
+      if (acc.trim()) {
+        await sb.from("chat_messages").insert({ role: "ai", content: acc });
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === aiId
+              ? { ...m, content: acc, streaming: false, timestamp: "Just now" }
+              : m
+          )
+        );
+      } else {
+        setMessages((prev) => prev.filter((m) => m.id !== aiId));
+      }
+    } catch (e: any) {
+      if (e?.name !== "AbortError") {
+        setError(e?.message || "Failed to get a response.");
+        setMessages((prev) => prev.filter((m) => m.id !== aiId));
+      }
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -65,7 +214,10 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
               <div className="w-7 h-7 rounded-lg bg-[var(--primary-subtle)] flex items-center justify-center">
                 <Sparkles size={14} className="text-[var(--primary)]" />
               </div>
-              <span className="text-sm font-semibold">MorphOS Copilot</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold">MorphOS Copilot</span>
+                <span className="text-[10px] text-[var(--text-muted)]">Powered by GPT 5.6 Luna</span>
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -109,13 +261,23 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                 <div className="flex flex-col gap-1">
                   <div
                     className={cn(
-                      "px-3.5 py-2.5 rounded-xl text-sm leading-relaxed",
+                      "px-3.5 py-2.5 rounded-xl text-sm leading-relaxed whitespace-pre-wrap break-words",
                       msg.role === "ai"
                         ? "bg-[var(--card)] border border-[var(--card-border)] rounded-tl-sm"
                         : "bg-[var(--primary)] text-white rounded-tr-sm"
                     )}
                   >
-                    {msg.content}
+                    {msg.content || (msg.streaming ? "" : "")}
+                    {msg.streaming && !msg.content && (
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] animate-bounce" />
+                        <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] animate-bounce" style={{ animationDelay: "0.15s" }} />
+                        <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] animate-bounce" style={{ animationDelay: "0.3s" }} />
+                      </span>
+                    )}
+                    {msg.streaming && msg.content && (
+                      <span className="inline-block w-1.5 h-4 bg-current animate-pulse ml-0.5 align-middle" />
+                    )}
                   </div>
                   <span className="text-[10px] text-[var(--text-muted)] px-1">
                     {msg.timestamp}
@@ -124,22 +286,11 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
               </motion.div>
             ))}
 
-            {/* Typing Indicator */}
-            {isTyping && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex gap-2.5"
-              >
-                <div className="w-7 h-7 rounded-lg bg-[var(--primary-subtle)] flex items-center justify-center shrink-0">
-                  <Bot size={14} className="text-[var(--primary)]" />
-                </div>
-                <div className="px-4 py-3 rounded-xl rounded-tl-sm bg-[var(--card)] border border-[var(--card-border)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] animate-bounce" />
-                  <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] animate-bounce" style={{ animationDelay: "0.15s" }} />
-                  <span className="w-2 h-2 rounded-full bg-[var(--text-muted)] animate-bounce" style={{ animationDelay: "0.3s" }} />
-                </div>
-              </motion.div>
+            {error && (
+              <div className="flex items-start gap-2 text-[11px] text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
+                <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-400" />
+                <span>{error}</span>
+              </div>
             )}
           </div>
 
@@ -150,7 +301,9 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSend();
+                }}
                 placeholder="Ask AI to modify..."
                 disabled={isTyping}
                 className="flex-1 bg-[var(--card)] border border-[var(--card-border)] px-4 py-2.5 rounded-xl text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--primary)]/50 transition-colors disabled:opacity-50"

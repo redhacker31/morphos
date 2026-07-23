@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { WorkspaceSurface } from "@/components/workspace/WorkspaceSurface";
@@ -13,10 +13,15 @@ import { RecentProjects } from "@/components/workspace/RecentProjects";
 import { EmptyWorkspace } from "@/components/workspace/EmptyWorkspace";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { DynamicRenderer } from "@/features/renderer";
+import { useAIGenerator } from "@/features/ai-generator/hooks/useAIGenerator";
+import { useProjects } from "@/hooks/useProjects";
+import { usePromptHistory } from "@/hooks/usePromptHistory";
+import { useSession } from "@/hooks/useSession";
+import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Layers, Play, Eye } from "lucide-react";
 
-// Sample Valid JSON AST Payload: Sales CRM Dashboard Blueprint
+// Fallback sample AST shown when no generated app is loaded yet.
 const SAMPLE_SALES_AST = {
   version: "1.0.0",
   meta: {
@@ -24,11 +29,7 @@ const SAMPLE_SALES_AST = {
     description: "Live pipeline revenue metrics and monthly deal forecasts.",
     theme: "dark-glass",
   },
-  layout: {
-    type: "dashboard",
-    columns: 12,
-    gap: 16,
-  },
+  layout: { type: "dashboard", columns: 12, gap: 16 },
   nodes: [
     {
       id: "a1b2c3d4-e5f6-4a5b-8c9d-111111111111",
@@ -36,12 +37,11 @@ const SAMPLE_SALES_AST = {
       gridPosition: { x: 0, y: 0, w: 12, h: 3 },
       props: {
         title: "Q3 Executive Revenue Operations",
-        description:
-          "Validated JSON AST Blueprint rendered dynamically by MorphOS Renderer Engine.",
+        description: "Validated JSON AST Blueprint rendered dynamically by MorphOS Renderer Engine.",
       },
     },
     {
-      id: "a1b2c3d4-e5f6-4a5b-8c9d-222222222222",
+      id: "a1b2c3d4-e5f6-4a5b-8c9d-333333333333",
       type: "metric-card",
       gridPosition: { x: 0, y: 3, w: 4, h: 4 },
       props: {
@@ -52,20 +52,9 @@ const SAMPLE_SALES_AST = {
       },
     },
     {
-      id: "a1b2c3d4-e5f6-4a5b-8c9d-333333333333",
-      type: "metric-card",
-      gridPosition: { x: 4, y: 3, w: 4, h: 4 },
-      props: {
-        title: "Average Deal Cycle",
-        description: "Time to close",
-        data: { value: "18.2" },
-        config: { unit: "", trend: "-2.4 Days", isPositive: true },
-      },
-    },
-    {
       id: "a1b2c3d4-e5f6-4a5b-8c9d-444444444444",
       type: "metric-card",
-      gridPosition: { x: 8, y: 3, w: 4, h: 4 },
+      gridPosition: { x: 4, y: 3, w: 4, h: 4 },
       props: {
         title: "Win Rate Percentage",
         description: "Closed-won deals",
@@ -92,23 +81,6 @@ const SAMPLE_SALES_AST = {
       },
     },
     {
-      id: "a1b2c3d4-e5f6-4a5b-8c9d-666666666666",
-      type: "line-chart",
-      gridPosition: { x: 6, y: 7, w: 6, h: 6 },
-      props: {
-        title: "Lead Acquisition Velocity",
-        description: "Weekly qualified inbound leads",
-        data: [
-          { name: "W1", value: 140 },
-          { name: "W2", value: 210 },
-          { name: "W3", value: 290 },
-          { name: "W4", value: 380 },
-          { name: "W5", value: 460 },
-        ],
-        config: { color: "#06B6D4", xAxisKey: "name", yAxisKey: "value" },
-      },
-    },
-    {
       id: "a1b2c3d4-e5f6-4a5b-8c9d-777777777777",
       type: "data-table",
       gridPosition: { x: 0, y: 13, w: 12, h: 6 },
@@ -130,19 +102,65 @@ const SAMPLE_SALES_AST = {
 export default function WorkspacePage() {
   const { id = "new" } = useParams<{ id: string }>();
 
+  const { ready } = useSession();
+  const ai = useAIGenerator();
+  const projectsHook = useProjects(ready);
+  const historyHook = usePromptHistory(ready);
+
   const [activeView, setActiveView] = useState("workspace");
   const [showUpload, setShowUpload] = useState(false);
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [showRendererDemo, setShowRendererDemo] = useState(false);
+  const [activeAst, setActiveAst] = useState<AppASTPayload | null>(null);
+  const [prompt, setPrompt] = useState("");
 
-  const workspaceTitle =
-    id === "new" ? "New Workspace" : `Workspace / ${id}`;
+  const workspaceTitle = id === "new" ? "New Workspace" : `Workspace / ${id}`;
 
-  const handleSelectTemplate = (templateId: string) => {
+  if (!ready) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[var(--background)] text-[var(--text-primary)]">
+        <div className="w-3 h-3 rounded-full bg-[var(--primary)] animate-bounce" />
+        <span className="text-xs text-[var(--text-muted)]">Preparing your workspace...</span>
+      </div>
+    );
+  }
+
+  const handleSelectTemplate = (_templateId: string) => {
     setShowTemplatesModal(false);
     setShowRendererDemo(true);
     setActiveView("workspace");
+  };
+
+  const handleOpenProject = (project: { id: string; ast: unknown }) => {
+    setActiveAst(project.ast as AppASTPayload);
+    setShowRendererDemo(true);
+    setActiveView("workspace");
+  };
+
+  const handleGenerate = async (promptText: string) => {
+    const res = await ai.generate(promptText);
+    if (res.success && res.ast) {
+      setActiveAst(res.ast);
+      setShowRendererDemo(true);
+      // Persist the generated app + prompt (ownership is set server-side).
+      try {
+        await projectsHook.createProject({
+          title: res.ast.meta.title,
+          prompt: promptText,
+          ast: res.ast,
+          domain: res.requirements?.domain ?? null,
+          node_count: res.ast.nodes.length,
+        });
+      } catch (e) {
+        console.warn("Failed to save project", e);
+      }
+      try {
+        await historyHook.addPrompt(promptText);
+      } catch (e) {
+        console.warn("Failed to save prompt", e);
+      }
+    }
   };
 
   return (
@@ -159,7 +177,7 @@ export default function WorkspacePage() {
           rendererSlot={
             showRendererDemo ? (
               <DynamicRenderer
-                astPayload={SAMPLE_SALES_AST}
+                astPayload={activeAst ?? SAMPLE_SALES_AST}
                 onWidgetEvent={(event) => {
                   console.log("[Renderer Widget Event]:", event);
                 }}
@@ -185,9 +203,13 @@ export default function WorkspacePage() {
                     <Eye size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white">Phase 2 Dynamic Renderer Engine Live Demo</h4>
+                    <h4 className="text-xs font-bold text-white">
+                      {activeAst ? "Live AI-Generated Application" : "Dynamic Renderer Engine"}
+                    </h4>
                     <p className="text-[11px] text-[var(--text-secondary)]">
-                      Test rendering valid JSON AST blueprints directly inside WorkspaceSurface.
+                      {activeAst
+                        ? "Generated by AI from your prompt. Describe another app to regenerate."
+                        : "Generate an app from a prompt, or preview the sample blueprint below."}
                     </p>
                   </div>
                 </div>
@@ -196,17 +218,18 @@ export default function WorkspacePage() {
                   className="px-4 py-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white text-xs font-extrabold flex items-center gap-2 hover:opacity-90 transition-all cursor-pointer shadow-lg"
                 >
                   <Play size={13} />
-                  <span>{showRendererDemo ? "Hide Renderer Frame" : "Render Sample JSON AST Blueprint"}</span>
+                  <span>{showRendererDemo ? "Hide Preview" : "Preview Blueprint"}</span>
                 </button>
               </div>
 
               {/* Prompt Studio Input Box */}
               <div className="pt-2">
                 <PromptInput
-                  onSubmit={(promptText) => {
-                    console.log("UI Prompt Submitted:", promptText);
-                    setShowRendererDemo(true);
-                  }}
+                  prompt={prompt}
+                  onPromptChange={setPrompt}
+                  isGenerating={ai.isGenerating}
+                  progress={ai.progress}
+                  onGenerate={handleGenerate}
                   onTemplatesClick={() => setShowTemplatesModal(true)}
                   onUploadClick={() => setShowUpload(!showUpload)}
                 />
@@ -240,9 +263,12 @@ export default function WorkspacePage() {
               {/* Recent Projects Manager */}
               <div className="pt-6 border-t border-white/10">
                 <RecentProjects
-                  onOpenProject={() => {
-                    setShowRendererDemo(true);
-                  }}
+                  projects={projectsHook.projects}
+                  loading={projectsHook.loading}
+                  onOpen={handleOpenProject}
+                  onToggleFavorite={projectsHook.toggleFavorite}
+                  onDelete={projectsHook.deleteProject}
+                  onDuplicate={projectsHook.duplicateProject}
                 />
               </div>
             </div>
@@ -260,10 +286,15 @@ export default function WorkspacePage() {
           {activeView === "history" && (
             <div className="py-4">
               <PromptHistory
-                onSelect={() => {
-                  setShowRendererDemo(true);
+                items={historyHook.items}
+                loading={historyHook.loading}
+                onSelect={(text) => {
+                  setPrompt(text);
                   setActiveView("workspace");
                 }}
+                onTogglePin={historyHook.togglePin}
+                onToggleFavorite={historyHook.toggleFavorite}
+                onDelete={historyHook.deleteItem}
               />
             </div>
           )}

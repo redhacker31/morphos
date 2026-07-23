@@ -10,6 +10,7 @@ export default tseslint.config(
       "docs/**",
       "dist/**",
       "node_modules/**",
+      "supabase/**",
     ],
   },
   ...tseslint.configs.recommended,

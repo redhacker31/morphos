@@ -1,35 +1,30 @@
-
-import React, { useState } from "react";
-import { Sparkles, Paperclip, LayoutTemplate, Mic, Loader2, CheckCircle2 } from "lucide-react";
-import { useAIGenerator } from "@/features/ai-generator/hooks/useAIGenerator";
-import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
+import React from "react";
+import { Sparkles, Paperclip, LayoutTemplate, Loader2 } from "lucide-react";
+import type { GenerationProgress } from "@/features/ai-generator/types/aiGenerator";
 
 interface PromptInputProps {
-  onSubmit?: (promptText: string) => void;
-  onASTGenerated?: (ast: AppASTPayload) => void;
+  prompt: string;
+  onPromptChange: (value: string) => void;
+  isGenerating: boolean;
+  progress: GenerationProgress | null;
+  onGenerate: (promptText: string) => void;
   onTemplatesClick?: () => void;
   onUploadClick?: () => void;
 }
 
 export default function PromptInput({
-  onSubmit,
-  onASTGenerated,
+  prompt,
+  onPromptChange,
+  isGenerating,
+  progress,
+  onGenerate,
   onTemplatesClick,
   onUploadClick,
 }: PromptInputProps) {
-  const [promptText, setPromptText] = useState("");
-  const { isGenerating, progress, generate } = useAIGenerator();
-
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!promptText.trim() || isGenerating) return;
-
-    onSubmit?.(promptText);
-
-    const res = await generate(promptText);
-    if (res.success && res.ast) {
-      onASTGenerated?.(res.ast);
-    }
+    if (!prompt.trim() || isGenerating) return;
+    onGenerate(prompt);
   };
 
   return (
@@ -47,8 +42,8 @@ export default function PromptInput({
 
             <textarea
               rows={3}
-              value={promptText}
-              onChange={(e) => setPromptText(e.target.value)}
+              value={prompt}
+              onChange={(e) => onPromptChange(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault();
@@ -109,7 +104,7 @@ export default function PromptInput({
 
               <button
                 type="submit"
-                disabled={isGenerating || !promptText.trim()}
+                disabled={isGenerating || !prompt.trim()}
                 className="px-5 py-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white text-xs font-extrabold flex items-center gap-2 hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
               >
                 {isGenerating ? (

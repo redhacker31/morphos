@@ -1,23 +1,37 @@
-
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Clock,
-  Search,
-  Pin,
-  Star,
-  Trash2,
-  MoreHorizontal,
-} from "lucide-react";
+import { Clock, Search, Pin, Star, Trash2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockPromptHistory, type PromptHistoryItem } from "@/lib/mock-data";
+import type { PromptHistoryRow } from "@/hooks/usePromptHistory";
 
-interface PromptHistoryProps {
-  onSelect?: (text: string) => void;
+function relTime(iso?: string): string {
+  if (!iso) return "Just now";
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "Just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
 }
 
-export default function PromptHistory({ onSelect }: PromptHistoryProps) {
-  const [items, setItems] = useState<PromptHistoryItem[]>(mockPromptHistory);
+interface PromptHistoryProps {
+  items: PromptHistoryRow[];
+  loading: boolean;
+  onSelect?: (text: string) => void;
+  onTogglePin: (id: string, value: boolean) => void;
+  onToggleFavorite: (id: string, value: boolean) => void;
+  onDelete: (id: string) => void;
+}
+
+export default function PromptHistory({
+  items,
+  loading,
+  onSelect,
+  onTogglePin,
+  onToggleFavorite,
+  onDelete,
+}: PromptHistoryProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = items.filter((item) =>
@@ -26,22 +40,6 @@ export default function PromptHistory({ onSelect }: PromptHistoryProps) {
 
   const pinned = filtered.filter((i) => i.pinned);
   const unpinned = filtered.filter((i) => !i.pinned);
-
-  const togglePin = (id: string) => {
-    setItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, pinned: !i.pinned } : i))
-    );
-  };
-
-  const toggleFavorite = (id: string) => {
-    setItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, favorited: !i.favorited } : i))
-    );
-  };
-
-  const deleteItem = (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
-  };
 
   return (
     <div className="flex flex-col h-full">
@@ -66,58 +64,66 @@ export default function PromptHistory({ onSelect }: PromptHistoryProps) {
 
       {/* List */}
       <div className="flex-1 overflow-y-auto px-4 py-3">
-        {/* Pinned */}
-        {pinned.length > 0 && (
-          <div className="mb-4">
-            <div className="flex items-center gap-1.5 px-2 mb-2">
-              <Pin size={12} className="text-[var(--text-muted)]" />
-              <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
-                Pinned
-              </span>
-            </div>
-            <AnimatePresence>
-              {pinned.map((item) => (
-                <HistoryItem
-                  key={item.id}
-                  item={item}
-                  onSelect={onSelect}
-                  onTogglePin={togglePin}
-                  onToggleFavorite={toggleFavorite}
-                  onDelete={deleteItem}
-                />
-              ))}
-            </AnimatePresence>
+        {loading ? (
+          <div className="text-center py-8 text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+            <Loader2 size={16} className="animate-spin" /> Loading prompts...
           </div>
-        )}
+        ) : (
+          <>
+            {/* Pinned */}
+            {pinned.length > 0 && (
+              <div className="mb-4">
+                <div className="flex items-center gap-1.5 px-2 mb-2">
+                  <Pin size={12} className="text-[var(--text-muted)]" />
+                  <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+                    Pinned
+                  </span>
+                </div>
+                <AnimatePresence>
+                  {pinned.map((item) => (
+                    <HistoryItem
+                      key={item.id}
+                      item={item}
+                      onSelect={onSelect}
+                      onTogglePin={onTogglePin}
+                      onToggleFavorite={onToggleFavorite}
+                      onDelete={onDelete}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
 
-        {/* Recent */}
-        {unpinned.length > 0 && (
-          <div>
-            <div className="flex items-center gap-1.5 px-2 mb-2">
-              <Clock size={12} className="text-[var(--text-muted)]" />
-              <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
-                Recent
-              </span>
-            </div>
-            <AnimatePresence>
-              {unpinned.map((item) => (
-                <HistoryItem
-                  key={item.id}
-                  item={item}
-                  onSelect={onSelect}
-                  onTogglePin={togglePin}
-                  onToggleFavorite={toggleFavorite}
-                  onDelete={deleteItem}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
+            {/* Recent */}
+            {unpinned.length > 0 && (
+              <div>
+                <div className="flex items-center gap-1.5 px-2 mb-2">
+                  <Clock size={12} className="text-[var(--text-muted)]" />
+                  <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+                    Recent
+                  </span>
+                </div>
+                <AnimatePresence>
+                  {unpinned.map((item) => (
+                    <HistoryItem
+                      key={item.id}
+                      item={item}
+                      onSelect={onSelect}
+                      onTogglePin={onTogglePin}
+                      onToggleFavorite={onToggleFavorite}
+                      onDelete={onDelete}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
 
-        {filtered.length === 0 && (
-          <div className="text-center py-8 text-sm text-[var(--text-muted)]">
-            No prompts found
-          </div>
+            {filtered.length === 0 && (
+              <div className="text-center py-8 text-sm text-[var(--text-muted)]">
+                No prompts found
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -131,10 +137,10 @@ function HistoryItem({
   onToggleFavorite,
   onDelete,
 }: {
-  item: PromptHistoryItem;
+  item: PromptHistoryRow;
   onSelect?: (text: string) => void;
-  onTogglePin: (id: string) => void;
-  onToggleFavorite: (id: string) => void;
+  onTogglePin: (id: string, value: boolean) => void;
+  onToggleFavorite: (id: string, value: boolean) => void;
   onDelete: (id: string) => void;
 }) {
   const [showActions, setShowActions] = useState(false);
@@ -156,37 +162,52 @@ function HistoryItem({
           {item.text}
         </p>
         <span className="text-[10px] text-[var(--text-muted)] mt-0.5 block">
-          {item.timestamp}
+          {relTime(item.created_at)}
         </span>
       </div>
 
-      <div className={cn(
-        "flex items-center gap-1 shrink-0 transition-opacity",
-        showActions ? "opacity-100" : "opacity-0"
-      )}>
+      <div
+        className={cn(
+          "flex items-center gap-1 shrink-0 transition-opacity",
+          showActions ? "opacity-100" : "opacity-0"
+        )}
+      >
         <button
-          onClick={(e) => { e.stopPropagation(); onTogglePin(item.id); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePin(item.id, !item.pinned);
+          }}
           className={cn(
-            "w-7 h-7 flex items-center justify-center rounded-md transition-colors",
-            item.pinned ? "text-[var(--primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            "w-7 h-7 flex items-center justify-center rounded-md transition-colors cursor-pointer",
+            item.pinned
+              ? "text-[var(--primary)]"
+              : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           )}
           aria-label={item.pinned ? "Unpin" : "Pin"}
         >
           <Pin size={13} />
         </button>
         <button
-          onClick={(e) => { e.stopPropagation(); onToggleFavorite(item.id); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(item.id, !item.favorited);
+          }}
           className={cn(
-            "w-7 h-7 flex items-center justify-center rounded-md transition-colors",
-            item.favorited ? "text-[var(--warning)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            "w-7 h-7 flex items-center justify-center rounded-md transition-colors cursor-pointer",
+            item.favorited
+              ? "text-amber-400"
+              : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           )}
           aria-label={item.favorited ? "Unfavorite" : "Favorite"}
         >
           <Star size={13} fill={item.favorited ? "currentColor" : "none"} />
         </button>
         <button
-          onClick={(e) => { e.stopPropagation(); onDelete(item.id); }}
-          className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:text-[var(--destructive)] transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(item.id);
+          }}
+          className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:text-red-400 transition-colors cursor-pointer"
           aria-label="Delete"
         >
           <Trash2 size={13} />

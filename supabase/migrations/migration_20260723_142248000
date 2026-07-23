@@ -1,0 +1,89 @@
+-- MorphOS backend tables: projects, prompt_history, chat_messages
+-- All tables enable RLS in this same migration, with policies scoped to the owning user.
+
+-- ============ projects ============
+CREATE TABLE IF NOT EXISTS public.projects (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  title text NOT NULL,
+  prompt text,
+  ast jsonb NOT NULL DEFAULT '{}'::jsonb,
+  domain text,
+  status text NOT NULL DEFAULT 'Active',
+  is_favorite boolean NOT NULL DEFAULT false,
+  node_count int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "users manage own projects"
+  ON public.projects FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- ============ prompt_history ============
+CREATE TABLE IF NOT EXISTS public.prompt_history (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  text text NOT NULL,
+  pinned boolean NOT NULL DEFAULT false,
+  favorited boolean NOT NULL DEFAULT false,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.prompt_history ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "users manage own prompt_history"
+  ON public.prompt_history FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- ============ chat_messages ============
+CREATE TABLE IF NOT EXISTS public.chat_messages (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  role text NOT NULL CHECK (role IN ('user','ai')),
+  content text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "users manage own chat_messages"
+  ON public.chat_messages FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- ============ server-determined ownership (so the client never sets user_id) ============
+CREATE OR REPLACE FUNCTION public.set_owner_uid()
+RETURNS trigger AS $$
+BEGIN
+  NEW.user_id := auth.uid();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS projects_set_owner ON public.projects;
+CREATE TRIGGER projects_set_owner
+  BEFORE INSERT ON public.projects
+  FOR EACH ROW EXECUTE FUNCTION public.set_owner_uid();
+
+DROP TRIGGER IF EXISTS prompt_history_set_owner ON public.prompt_history;
+CREATE TRIGGER prompt_history_set_owner
+  BEFORE INSERT ON public.prompt_history
+  FOR EACH ROW EXECUTE FUNCTION public.set_owner_uid();
+
+DROP TRIGGER IF EXISTS chat_messages_set_owner ON public.chat_messages;
+CREATE TRIGGER chat_messages_set_owner
+  BEFORE INSERT ON public.chat_messages
+  FOR EACH ROW EXECUTE FUNCTION public.set_owner_uid();
+
+-- ============ updated_at maintenance for projects ============
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+RETURNS trigger AS $$
+BEGIN
+  NEW.updated_at := now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS projects_set_updated_at ON public.projects;
+CREATE TRIGGER projects_set_updated_at
+  BEFORE UPDATE ON public.projects
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
