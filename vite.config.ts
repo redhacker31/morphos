@@ -1,17 +1,15 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { enterDevPlugin } from "vite-plugin-enter-dev";
 import path from "path";
 
 // https://vitejs.dev/config/
+// enterDevPlugin() bundles @vitejs/plugin-react plus the Enter sandbox
+// dev-server config (port/base/host/polling) required for the live preview.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [enterDevPlugin()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(process.cwd(), "src"),
     },
-  },
-  server: {
-    host: true,
-    port: 3000,
   },
 });
