@@ -61,6 +61,14 @@ const config: Config = {
           subtle: "var(--accent-subtle)",
           foreground: "var(--text-primary)",
         },
+        viz: {
+          1: "var(--viz-1)",
+          2: "var(--viz-2)",
+          3: "var(--viz-3)",
+          4: "var(--viz-4)",
+          5: "var(--viz-5)",
+          6: "var(--viz-6)",
+        },
         success: {
           DEFAULT: "var(--success)",
           glow: "var(--success-glow)",
@@ -101,6 +109,14 @@ const config: Config = {
         "glow-cyan": "0 0 20px rgba(var(--glow-cyan), 0.4)",
         "glow-success": "0 0 20px rgba(var(--glow-success), 0.4)",
         "glow-error": "0 0 20px rgba(var(--glow-error), 0.4)",
+        "elev-1": "var(--elevation-1)",
+        "elev-2": "var(--elevation-2)",
+        "elev-3": "var(--elevation-3)",
+        "elev-4": "var(--elevation-4)",
+      },
+      transitionTimingFunction: {
+        elegant: "var(--ease-out)",
+        smooth: "var(--ease-smooth)",
       },
       zIndex: {
         dropdown: "var(--z-dropdown)",
@@ -121,10 +137,20 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(14px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.55" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-up": "fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "pulse-glow": "pulse-glow 2.4s ease-in-out infinite",
       },
     },
   },

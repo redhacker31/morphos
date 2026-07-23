@@ -91,6 +91,33 @@
      ============================================ */
   --font-inter: "Inter", system-ui, -apple-system, sans-serif;
   --font-space-grotesk: "Space Grotesk", "Inter", sans-serif;
+
+  /* ============================================
+     DATA-VIZ SERIES PALETTE
+     ============================================ */
+  --viz-1: #8b5cf6; /* violet */
+  --viz-2: #06b6d4; /* cyan */
+  --viz-3: #22c55e; /* emerald */
+  --viz-4: #f59e0b; /* amber */
+  --viz-5: #ec4899; /* pink */
+  --viz-6: #6366f1; /* indigo */
+
+  /* ============================================
+     ELEVATION SCALE
+     ============================================ */
+  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --elevation-2: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --elevation-3: 0 10px 30px -6px rgba(0, 0, 0, 0.5);
+  --elevation-4: 0 20px 50px -12px rgba(0, 0, 0, 0.65);
+
+  /* ============================================
+     MOTION TOKENS
+     ============================================ */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 300ms;
+  --dur-slow: 600ms;
 }
 
 /* ============================================
@@ -183,6 +210,27 @@ h6 {
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
   }
 }
 
@@ -283,4 +331,17 @@ h6 {
 
 .animate-spin-slow {
   animation: spin-slow 1s linear infinite;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s var(--ease-out) both;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+.metric-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }

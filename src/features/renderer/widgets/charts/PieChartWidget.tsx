@@ -1,7 +1,8 @@
-
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import type { BaseWidgetProps, WidgetMetadata } from "../../types/renderer";
 import { PieChart as PieIcon } from "lucide-react";
+import { VIZ_PALETTE, CHART_SURFACE, ChartTooltip } from "./chartUtils";
 
 export const PieChartWidgetMetadata: WidgetMetadata = {
   type: "pie-chart",
@@ -37,21 +38,32 @@ export const PieChartWidget = memo(function PieChartWidget({
   config = PieChartWidgetMetadata.defaultConfig,
   onWidgetEvent,
 }: BaseWidgetProps) {
-  const chartData = Array.isArray(data) && data.length > 0 ? data : (PieChartWidgetMetadata.defaultData as any[]);
-  const palette = (config?.colors as string[]) || (PieChartWidgetMetadata.defaultConfig.colors as string[]);
+  const chartData =
+    Array.isArray(data) && data.length > 0 ? data : (PieChartWidgetMetadata.defaultData as any[]);
+  const palette =
+    Array.isArray(config?.colors) && config.colors.length > 0
+      ? (config.colors as string[])
+      : VIZ_PALETTE;
+
+  const total = chartData.reduce((sum, d) => sum + (Number(d.value) || 0), 0);
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
   return (
     <div
-      onClick={() => onWidgetEvent?.({ widgetId: id, eventType: "onSelect", timestamp: Date.now(), payload: { id } })}
-      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 space-y-3 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all group"
+      onClick={() =>
+        onWidgetEvent?.({ widgetId: id, eventType: "onSelect", timestamp: Date.now(), payload: { id } })
+      }
+      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 backdrop-blur-xl flex flex-col shadow-elev-2 hover:border-white/20 hover:shadow-elev-3 transition-all duration-300 group"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/15 flex items-center justify-center text-[var(--accent)]">
             <PieIcon size={16} />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-white group-hover:text-[var(--accent)] transition-colors">{title}</h4>
+            <h4 className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+              {title}
+            </h4>
             {description && <p className="text-[10px] text-[var(--text-muted)]">{description}</p>}
           </div>
         </div>
@@ -60,23 +72,68 @@ export const PieChartWidget = memo(function PieChartWidget({
         </span>
       </div>
 
-      {/* Radial Distribution Bar Representation */}
-      <div className="space-y-2 pt-2">
-        {chartData.map((item, idx) => {
-          const color = palette[idx % palette.length];
-          const val = Number(item.value) || 0;
-          return (
-            <div key={idx} className="space-y-1">
-              <div className="flex justify-between text-[11px] font-medium text-white">
-                <span>{item.name}</span>
-                <span className="font-mono text-[var(--text-secondary)]">{val}%</span>
+      <div className="flex flex-col sm:flex-row items-center gap-4 flex-1">
+        <div className="relative w-full sm:w-1/2 h-[200px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius="58%"
+                outerRadius="82%"
+                paddingAngle={2}
+                isAnimationActive
+                animationDuration={700}
+                animationEasing="ease-out"
+                onMouseEnter={(_: any, i: number) => setActiveIdx(i)}
+                onMouseLeave={() => setActiveIdx(null)}
+              >
+                {chartData.map((_, idx) => (
+                  <Cell
+                    key={idx}
+                    fill={palette[idx % palette.length]}
+                    stroke={CHART_SURFACE}
+                    strokeWidth={2}
+                    opacity={activeIdx === null || activeIdx === idx ? 1 : 0.35}
+                  />
+                ))}
+              </Pie>
+              <Tooltip content={<ChartTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Total</span>
+            <span className="text-lg font-bold text-[var(--text-primary)] metric-nums">
+              {total.toLocaleString()}
+            </span>
+          </div>
+        </div>
+
+        <div className="w-full sm:w-1/2 space-y-1.5">
+          {chartData.map((item, idx) => {
+            const color = palette[idx % palette.length];
+            const val = Number(item.value) || 0;
+            const pct = total > 0 ? Math.round((val / total) * 100) : 0;
+            const active = activeIdx === idx;
+            return (
+              <div
+                key={idx}
+                className={`flex items-center gap-2 text-xs rounded-lg px-2 py-1.5 transition-colors duration-200 ${
+                  active ? "bg-white/5" : ""
+                }`}
+                onMouseEnter={() => setActiveIdx(idx)}
+                onMouseLeave={() => setActiveIdx(null)}
+              >
+                <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: color }} />
+                <span className="text-[var(--text-secondary)] truncate">{item.name}</span>
+                <span className="ml-auto font-mono text-[var(--text-primary)] metric-nums">{pct}%</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
-                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${val}%`, backgroundColor: color }} />
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

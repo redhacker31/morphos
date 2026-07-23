@@ -1,4 +1,3 @@
-
 import React from "react";
 import type { BaseWidgetProps, WidgetMetadata } from "../../types/renderer";
 import { Zap, ArrowUpRight, ArrowDownRight } from "lucide-react";
@@ -44,21 +43,23 @@ export function MetricCardWidget({
   return (
     <div
       onClick={() => onWidgetEvent?.({ widgetId: id, eventType: "onSelect", timestamp: Date.now(), payload: { id } })}
-      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 space-y-3 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all group cursor-pointer"
+      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 backdrop-blur-xl flex flex-col justify-between shadow-elev-2 hover:border-white/20 hover:shadow-elev-3 transition-all duration-300 group cursor-pointer overflow-hidden relative"
     >
-      <div className="flex items-center justify-between">
+      <div className="pointer-events-none absolute -top-16 -right-16 w-40 h-40 rounded-full bg-[var(--primary)]/10 blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+
+      <div className="flex items-center justify-between relative">
         <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{title}</span>
-        <div className="w-7 h-7 rounded-lg bg-[var(--primary)]/15 flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">
+        <div className="w-8 h-8 rounded-xl bg-[var(--primary)]/15 border border-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform duration-300">
           <Zap size={14} />
         </div>
       </div>
 
-      <div className="space-y-1">
-        <div className="text-3xl font-extrabold text-white tracking-tight">
+      <div className="space-y-1 relative">
+        <div className="text-3xl font-extrabold text-[var(--text-primary)] tracking-tight metric-nums">
           {unit}{metricVal}
         </div>
         <div className="flex items-center gap-1.5 text-[11px] font-semibold">
-          <span className={`flex items-center ${isPositive ? "text-[var(--success)]" : "text-[var(--error)]"}`}>
+          <span className={`flex items-center gap-0.5 ${isPositive ? "text-[var(--success)]" : "text-[var(--error)]"}`}>
             {isPositive ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
             {trend}
           </span>
