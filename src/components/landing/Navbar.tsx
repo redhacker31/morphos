@@ -19,6 +19,14 @@ export function Navbar() {
           </span>
         </Link>
 
+        {/* Dashboard Showcase */}
+        <Link
+          to="/dashboard"
+          className="hidden md:flex items-center text-xs font-semibold text-zinc-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5"
+        >
+          Dashboard
+        </Link>
+
         {/* Center: Search Input Bar */}
         <div className="flex-1 max-w-md hidden md:block">
           <div className="relative flex items-center">
