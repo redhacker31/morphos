@@ -33,12 +33,12 @@ export function HeroBannerWidget({
   const bannerSubtitle = (config.bannerSubtitle as string) || (HeroBannerWidgetMetadata.defaultConfig.bannerSubtitle as string);
 
   return (
-    <div className="w-full h-full rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/10 to-transparent border border-white/15 p-6 space-y-2 backdrop-blur-2xl shadow-xl relative overflow-hidden flex flex-col justify-center">
+    <div className="w-full h-full rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/10 to-transparent border border-[var(--card-border)] p-6 space-y-2 backdrop-blur-2xl shadow-xl relative overflow-hidden flex flex-col justify-center">
       <div className="flex items-center gap-2 text-xs font-bold text-[var(--primary)] uppercase tracking-wider">
         <Sparkles size={14} />
         <span>GENERATED APPLICATION VIEW</span>
       </div>
-      <h2 className="text-2xl font-extrabold text-white tracking-tight">{bannerTitle}</h2>
+      <h2 className="text-2xl font-extrabold text-[var(--text-primary)] tracking-tight">{bannerTitle}</h2>
       <p className="text-xs text-[var(--text-secondary)] max-w-xl">{bannerSubtitle}</p>
     </div>
   );

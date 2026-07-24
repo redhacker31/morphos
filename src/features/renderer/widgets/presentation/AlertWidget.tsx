@@ -37,10 +37,10 @@ export const AlertWidget = memo(function AlertWidget({
   const isError = alertType === "error";
 
   const boxStyle = isError
-    ? "bg-red-500/10 border-red-500/30 text-red-200"
+    ? "bg-red-500/10 border-red-500/30 text-red-700"
     : isWarning
-    ? "bg-amber-500/10 border-amber-500/30 text-amber-200"
-    : "bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary-light)]";
+    ? "bg-amber-500/10 border-amber-500/30 text-amber-700"
+    : "bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]";
 
   const Icon = isError ? AlertCircle : isWarning ? AlertCircle : CheckCircle2;
 
@@ -48,7 +48,7 @@ export const AlertWidget = memo(function AlertWidget({
     <div className={`w-full rounded-xl border p-4 flex items-start gap-3 backdrop-blur-xl ${boxStyle}`}>
       <Icon size={18} className="shrink-0 mt-0.5" />
       <div>
-        <h5 className="text-xs font-bold text-white">{title}</h5>
+        <h5 className="text-xs font-bold text-[var(--text-primary)]">{title}</h5>
         <p className="text-[11px] opacity-90">{msg}</p>
       </div>
     </div>

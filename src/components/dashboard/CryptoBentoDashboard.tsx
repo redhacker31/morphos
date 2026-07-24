@@ -110,7 +110,7 @@ const marketCapSeries = [56, 48, 38, 28, 20, 16, 14, 13, 12, 11, 10, 9].map((v, 
 
 // ============ Card primitives ============
 const cardBase =
-  "rounded-3xl bg-[var(--surface-elevated)]/80 border border-white/10 backdrop-blur-xl shadow-elev-2 hover:shadow-elev-3 hover:border-white/20 transition-all duration-300";
+  "rounded-3xl bg-[var(--surface-elevated)]/80 border border-[var(--card-border)] backdrop-blur-xl shadow-elev-2 hover:shadow-elev-3 hover:border-[var(--card-border-hover)] transition-all duration-300";
 
 function SalesStatisticsCard({ data }: { data: SalesStatisticsData }) {
   return (
@@ -122,10 +122,10 @@ function SalesStatisticsCard({ data }: { data: SalesStatisticsData }) {
     >
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h3 className="text-white text-lg font-bold">{data.title}</h3>
+          <h3 className="text-[var(--text-primary)] text-lg font-bold">{data.title}</h3>
           <p className="text-[var(--text-muted)] text-sm">{data.subtitle}</p>
         </div>
-        <button className="border border-white/15 text-[var(--text-secondary)] px-3 py-1.5 rounded-full text-[10px] flex items-center gap-1.5 hover:border-white/30 hover:text-white hover:bg-white/5 transition-all">
+        <button className="border border-[var(--card-border)] text-[var(--text-secondary)] px-3 py-1.5 rounded-full text-[10px] flex items-center gap-1.5 hover:border-[var(--card-border-hover)] hover:text-[var(--text-primary)] hover:bg-[var(--hover-overlay)] transition-all">
           {data.period}
           <ChevronDown size={12} />
         </button>
@@ -139,7 +139,7 @@ function SalesStatisticsCard({ data }: { data: SalesStatisticsData }) {
               <ArrowUp size={11} className="text-[var(--surface)]" />
             </span>
           </div>
-          <p className="text-white text-4xl font-extrabold metric-nums">{data.visitors.toLocaleString()}</p>
+          <p className="text-[var(--text-primary)] text-4xl font-extrabold metric-nums">{data.visitors.toLocaleString()}</p>
         </div>
 
         <div className="w-full sm:w-[230px] h-[150px]">
@@ -169,11 +169,11 @@ function RecentTransactionsCard({ data }: { data: TransactionData }) {
     >
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-[var(--surface)] border border-white/10 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
-            <ArrowLeftRight size={20} className="text-white" />
+          <div className="w-12 h-12 rounded-full bg-[var(--surface)] border border-[var(--card-border)] flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+            <ArrowLeftRight size={20} className="text-[var(--text-primary)]" />
           </div>
           <div>
-            <h3 className="text-white font-bold text-lg">{data.title}</h3>
+            <h3 className="text-[var(--text-primary)] font-bold text-lg">{data.title}</h3>
             <p className="text-[var(--text-muted)] text-sm">{data.subtitle}</p>
           </div>
         </div>
@@ -189,12 +189,12 @@ function RecentTransactionsCard({ data }: { data: TransactionData }) {
         </div>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors cursor-pointer">
+      <div className="bg-[var(--hover-overlay)] border border-[var(--card-border)] rounded-full px-4 py-3 flex items-center justify-between hover:bg-[var(--active-overlay)] transition-colors cursor-pointer">
         <div className="flex items-center gap-3">
           <Wallet size={22} className="text-[var(--text-secondary)]" />
           <span className="text-[var(--text-secondary)] text-sm metric-nums">{data.amount}</span>
         </div>
-        <button className="text-[var(--text-muted)] hover:text-white transition-colors">
+        <button className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
           <MoreHorizontal size={18} />
         </button>
       </div>
@@ -211,31 +211,31 @@ function CurrentBalanceCard({ data }: { data: BalanceData }) {
       className={`${cardBase} p-5 md:p-6 flex-1 flex flex-col`}
     >
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-white font-bold text-lg">{data.title}</h3>
+        <h3 className="text-[var(--text-primary)] font-bold text-lg">{data.title}</h3>
         <div className="flex gap-2">
-          <button className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:scale-110 transition-all">
+          <button className="w-8 h-8 rounded-full bg-[var(--hover-overlay)] border border-[var(--card-border)] flex items-center justify-center hover:bg-[var(--active-overlay)] hover:scale-110 transition-all">
             <ChevronLeft size={14} className="text-[var(--text-secondary)]" />
           </button>
-          <button className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:scale-110 transition-all">
+          <button className="w-8 h-8 rounded-full bg-[var(--hover-overlay)] border border-[var(--card-border)] flex items-center justify-center hover:bg-[var(--active-overlay)] hover:scale-110 transition-all">
             <ChevronRight size={14} className="text-[var(--text-secondary)]" />
           </button>
         </div>
       </div>
 
       <div className="rounded-[24px] p-5 relative overflow-hidden border border-[var(--viz-3)]/20 bg-gradient-to-br from-[var(--viz-3)]/15 to-transparent flex-1 flex flex-col">
-        <div className="w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center mb-4 hover:scale-110 transition-transform cursor-pointer">
-          <TrendingUp size={18} className="text-white" />
+        <div className="w-10 h-10 rounded-full bg-[var(--active-overlay)] border border-[var(--card-border)] flex items-center justify-center mb-4 hover:scale-110 transition-transform cursor-pointer">
+          <TrendingUp size={18} className="text-[var(--text-primary)]" />
         </div>
 
         <div className="flex items-end justify-between gap-2 flex-1">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-white font-bold text-xl metric-nums">{data.percentage}%</span>
-              <div className="w-6 h-6 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
+              <span className="text-[var(--text-primary)] font-bold text-xl metric-nums">{data.percentage}%</span>
+              <div className="w-6 h-6 rounded-full bg-[var(--active-overlay)] border border-[var(--card-border)] flex items-center justify-center">
                 <ArrowUpRight size={12} className="text-[var(--viz-3)]" />
               </div>
             </div>
-            <p className="text-white/60 text-xs mt-1">Avg score: {data.avgScore}</p>
+            <p className="text-[var(--text-primary)]/60 text-xs mt-1">Avg score: {data.avgScore}</p>
           </div>
 
           <div className="relative">
@@ -250,7 +250,7 @@ function CurrentBalanceCard({ data }: { data: BalanceData }) {
               <circle cx="80" cy="25" r="6" fill={VIOLET} className="animate-pulse-slow" />
             </svg>
             <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
-              <p className="text-white text-2xl font-bold metric-nums">{data.balance}</p>
+              <p className="text-[var(--text-primary)] text-2xl font-bold metric-nums">{data.balance}</p>
             </div>
           </div>
         </div>
@@ -270,13 +270,13 @@ function MarketForecastCard({ data }: { data: MarketForecastData }) {
       <div className="flex gap-4 h-full">
         <div className="flex-1 min-w-0">
           <div className="relative">
-            <div className="absolute left-[23px] top-[24px] w-[2px] bg-white/10" style={{ height: 320 }} />
+            <div className="absolute left-[23px] top-[24px] w-[2px] bg-[var(--active-overlay)]" style={{ height: 320 }} />
 
             <div className="flex items-start gap-3 mb-6 relative z-10">
               <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[var(--viz-3)]/20 border border-[var(--viz-3)]/30 hover:scale-110 transition-transform cursor-pointer">
                 <Smile size={22} className="text-[var(--viz-3)]" />
               </div>
-              <h3 className="text-white font-bold text-lg leading-tight pt-2">
+              <h3 className="text-[var(--text-primary)] font-bold text-lg leading-tight pt-2">
                 Market
                 <br />
                 forecast
@@ -296,12 +296,12 @@ function MarketForecastCard({ data }: { data: MarketForecastData }) {
                     className={`w-4 h-4 rounded-full border-2 transition-all group-hover/timeline:scale-125 ${
                       item.isActive
                         ? "bg-[var(--viz-1)] border-[var(--viz-1)]"
-                        : "bg-transparent border-white/20 group-hover/timeline:border-[var(--viz-3)]"
+                        : "bg-transparent border-[var(--card-border-hover)] group-hover/timeline:border-[var(--viz-3)]"
                     }`}
                   />
                 </div>
                 <div className="group-hover/timeline:translate-x-1 transition-transform">
-                  <p className="text-white font-bold text-sm">{item.year}</p>
+                  <p className="text-[var(--text-primary)] font-bold text-sm">{item.year}</p>
                   <p className="text-[var(--text-muted)] text-xs leading-tight max-w-[100px]">{item.description}</p>
                 </div>
               </motion.div>
@@ -312,18 +312,18 @@ function MarketForecastCard({ data }: { data: MarketForecastData }) {
         <div className="w-44 sm:w-52 flex flex-col gap-3 my-auto">
           <div className="rounded-[24px] p-4 aspect-square border border-[var(--viz-3)]/30 bg-gradient-to-br from-[var(--viz-3)]/15 to-transparent hover:scale-[1.02] transition-transform cursor-pointer flex flex-col">
             <div className="flex justify-between items-start mb-1">
-              <span className="text-white/60 text-[10px]">BTC price</span>
-              <ArrowUpRight size={14} className="text-white" />
+              <span className="text-[var(--text-primary)]/60 text-[10px]">BTC price</span>
+              <ArrowUpRight size={14} className="text-[var(--text-primary)]" />
             </div>
-            <p className="text-white text-2xl font-bold metric-nums">{data.btcPrice}</p>
+            <p className="text-[var(--text-primary)] text-2xl font-bold metric-nums">{data.btcPrice}</p>
             <span className="text-[var(--viz-3)] text-xs">{data.btcGrowth}</span>
 
             <div className="mt-auto relative pt-6">
               <div className="absolute left-[60%] -top-1 -translate-x-1/2 z-10">
                 <div className="w-4 h-4 rounded-full bg-[var(--viz-1)] animate-pulse-slow" />
               </div>
-              <div className="absolute left-[60%] top-0 -translate-x-1/2 w-[1px] h-8 bg-white/40" />
-              <div className="w-full h-8 rounded-full border border-white/15 bg-white/5 overflow-hidden flex">
+              <div className="absolute left-[60%] top-0 -translate-x-1/2 w-[1px] h-8 bg-[var(--card-border-hover)]" />
+              <div className="w-full h-8 rounded-full border border-[var(--card-border)] bg-[var(--hover-overlay)] overflow-hidden flex">
                 <div className="w-3/5 h-full relative">
                   <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                     <pattern id="btcStripes" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)">
@@ -339,10 +339,10 @@ function MarketForecastCard({ data }: { data: MarketForecastData }) {
 
           <div className="rounded-[24px] p-4 aspect-square border border-[var(--viz-1)]/30 bg-gradient-to-br from-[var(--viz-1)]/20 to-transparent hover:scale-[1.02] transition-transform cursor-pointer flex flex-col">
             <div className="flex justify-between items-start mb-1">
-              <span className="text-white/60 text-[10px]">Market cap forecast</span>
-              <ArrowUpRight size={14} className="text-white" />
+              <span className="text-[var(--text-primary)]/60 text-[10px]">Market cap forecast</span>
+              <ArrowUpRight size={14} className="text-[var(--text-primary)]" />
             </div>
-            <p className="text-white text-2xl font-bold mb-2 metric-nums">{data.marketCap}</p>
+            <p className="text-[var(--text-primary)] text-2xl font-bold mb-2 metric-nums">{data.marketCap}</p>
             <div className="h-20">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={marketCapSeries} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>

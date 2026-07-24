@@ -13,8 +13,8 @@ const buttonVariants = cva(
       variant: {
         primary: "bg-primary text-white shadow-soft hover:shadow-glow-purple hover:bg-primary-hover",
         secondary: "bg-surface-elevated text-text-primary hover:bg-surface-elevated/80 border border-border",
-        ghost: "hover:bg-white/5 hover:text-text-primary text-text-secondary",
-        outline: "border border-border bg-transparent hover:bg-white/5 text-text-primary",
+        ghost: "hover:bg-[var(--hover-overlay)] hover:text-text-primary text-text-secondary",
+        outline: "border border-border bg-transparent hover:bg-[var(--hover-overlay)] text-text-primary",
         gradient: "bg-gradient-to-r from-primary to-accent text-white shadow-soft hover:shadow-glow-purple",
         danger: "bg-error text-white shadow-soft hover:shadow-glow-error hover:bg-error/90",
         success: "bg-success text-white shadow-soft hover:shadow-glow-success hover:bg-success/90",

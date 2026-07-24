@@ -101,12 +101,12 @@ export default function Sidebar({
         initial={false}
         animate={{ width: collapsed ? 64 : 260 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="h-full flex flex-col bg-[#0F0F12]/90 backdrop-blur-2xl border-r border-white/10 relative z-[1020] shrink-0 overflow-hidden select-none"
+        className="h-full flex flex-col bg-[var(--surface-elevated)]/80 backdrop-blur-2xl border-r border-[var(--card-border)] relative z-[1020] shrink-0 overflow-hidden select-none"
       >
         {/* Logo Header */}
         <div
           className={cn(
-            "h-16 flex items-center shrink-0 border-b border-white/10 px-4",
+            "h-16 flex items-center shrink-0 border-b border-[var(--card-border)] px-4",
             collapsed ? "justify-center" : "justify-between"
           )}
         >
@@ -121,25 +121,25 @@ export default function Sidebar({
 
         {/* Workspace Switcher */}
         {!collapsed && (
-          <div className="p-3 border-b border-white/10 relative">
+          <div className="p-3 border-b border-[var(--card-border)] relative">
             <button
               onClick={() => setWorkspaceMenuOpen(!workspaceMenuOpen)}
-              className="w-full flex items-center justify-between p-2 rounded-xl bg-white/[0.03] border border-white/10 hover:bg-white/5 transition-all text-xs cursor-pointer group"
+              className="w-full flex items-center justify-between p-2 rounded-xl bg-[var(--hover-overlay)] border border-[var(--card-border)] hover:bg-[var(--hover-overlay)] transition-all text-xs cursor-pointer group"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className="w-6 h-6 rounded-lg bg-[var(--primary)]/20 border border-[var(--primary)]/40 flex items-center justify-center text-[var(--primary)] font-bold text-[10px] shrink-0">
                   <Building2 size={13} />
                 </div>
                 <div className="truncate text-left">
-                  <div className="font-bold text-white truncate text-[11px]">{selectedWorkspace.name}</div>
+                  <div className="font-bold text-[var(--text-primary)] truncate text-[11px]">{selectedWorkspace.name}</div>
                   <div className="text-[9px] text-[var(--text-muted)]">{selectedWorkspace.role} Workspace</div>
                 </div>
               </div>
-              <ChevronDown size={14} className={`text-[var(--text-muted)] group-hover:text-white transition-transform ${workspaceMenuOpen ? "rotate-180" : ""}`} />
+              <ChevronDown size={14} className={`text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-transform ${workspaceMenuOpen ? "rotate-180" : ""}`} />
             </button>
 
             {workspaceMenuOpen && (
-              <div className="absolute left-3 right-3 top-16 bg-[var(--surface-elevated)] border border-white/15 rounded-xl shadow-2xl p-1 z-30 space-y-1">
+              <div className="absolute left-3 right-3 top-16 bg-[var(--surface-elevated)] border border-[var(--card-border)] rounded-xl shadow-2xl p-1 z-30 space-y-1">
                 <div className="px-2.5 py-1 text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
                   Switch Workspace
                 </div>
@@ -151,17 +151,17 @@ export default function Sidebar({
                       setWorkspaceMenuOpen(false);
                     }}
                     className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between cursor-pointer transition-colors ${
-                      ws.id === selectedWorkspace.id ? "bg-[var(--primary)] text-white font-bold" : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-white"
+                      ws.id === selectedWorkspace.id ? "bg-[var(--primary)] text-white font-bold" : "text-[var(--text-secondary)] hover:bg-[var(--hover-overlay)] hover:text-[var(--text-primary)]"
                     }`}
                   >
                     <span className="truncate">{ws.name}</span>
                     <span className="text-[9px] opacity-70">{ws.role}</span>
                   </button>
                 ))}
-                <div className="border-t border-white/10 pt-1">
+                <div className="border-t border-[var(--card-border)] pt-1">
                   <button
                     onClick={() => setWorkspaceMenuOpen(false)}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs text-[var(--primary)] hover:bg-white/5 flex items-center gap-2 font-semibold cursor-pointer"
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs text-[var(--primary)] hover:bg-[var(--hover-overlay)] flex items-center gap-2 font-semibold cursor-pointer"
                   >
                     <Plus size={13} /> Create Workspace
                   </button>
@@ -178,7 +178,7 @@ export default function Sidebar({
               {!collapsed && (
                 <button
                   onClick={() => toggleGroup(group.title)}
-                  className="w-full flex items-center justify-between px-3 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider hover:text-white transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between px-3 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                 >
                   <span>{group.title}</span>
                   <motion.span
@@ -216,7 +216,7 @@ export default function Sidebar({
         </div>
 
         {/* System & Profile Section */}
-        <div className="py-3 px-2 space-y-0.5 border-t border-white/10 bg-black/20">
+        <div className="py-3 px-2 space-y-0.5 border-t border-[var(--card-border)] bg-[var(--hover-overlay)]">
           <SidebarItem
             item={{ id: "settings", label: "Settings", icon: Settings }}
             active={activeView === "settings"}
@@ -230,24 +230,24 @@ export default function Sidebar({
             onClick={() => onViewChange("help")}
           />
 
-          <Separator className="my-2 bg-white/10" />
+          <Separator className="my-2 bg-[var(--card-border)]" />
 
           {/* Profile Card */}
           <div
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-[var(--text-secondary)] hover:bg-white/5 hover:text-white transition-colors duration-200 group relative",
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-[var(--text-secondary)] hover:bg-[var(--hover-overlay)] hover:text-[var(--text-primary)] transition-colors duration-200 group relative",
               collapsed && "justify-center px-0"
             )}
           >
             <div className="relative shrink-0">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] flex items-center justify-center text-white font-bold text-sm shadow-[0_0_12px_rgba(139,92,246,0.4)]">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] flex items-center justify-center text-white font-bold text-sm shadow-[0_0_12px_rgba(82,39,255,0.4)]">
                 G
               </div>
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[var(--success)] border-2 border-[#0F0F12] shadow-[0_0_8px_var(--success-glow)]" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[var(--success)] border-2 border-[var(--surface-elevated)] shadow-[0_0_8px_var(--success-glow)]" />
             </div>
             {!collapsed && (
             <div className="flex-grow min-w-0">
-              <div className="text-xs font-bold text-white truncate">Guest</div>
+              <div className="text-xs font-bold text-[var(--text-primary)] truncate">Guest</div>
               <div className="text-[10px] text-[var(--text-muted)] truncate font-mono">anon · {shortId}</div>
             </div>
             )}
@@ -262,7 +262,7 @@ export default function Sidebar({
         {/* Collapse Toggle Handle */}
         <button
           onClick={onToggleCollapse}
-          className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-12 rounded-l-none rounded-r-lg bg-[#0F0F12] border-t border-b border-r border-white/15 flex items-center justify-center text-[var(--text-muted)] hover:text-white transition-all z-50 shadow-xl cursor-pointer"
+          className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-12 rounded-l-none rounded-r-lg bg-[var(--surface-elevated)] border-t border-b border-r border-[var(--card-border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all z-50 shadow-xl cursor-pointer"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
@@ -292,8 +292,8 @@ function SidebarItem({
         "w-full flex items-center gap-3 rounded-xl text-xs font-semibold transition-all duration-200 relative group cursor-pointer overflow-hidden",
         collapsed ? "justify-center px-0 py-3" : "px-3 py-2.5",
         active
-          ? "text-white"
-          : "text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.04]"
+          ? "text-[var(--text-primary)]"
+          : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--hover-overlay)]"
       )}
       aria-label={item.label}
     >
@@ -312,7 +312,7 @@ function SidebarItem({
         whileTap={{ scale: 0.95 }}
         className={cn(
           "relative z-10 shrink-0 transition-colors duration-200",
-          active ? "text-[var(--primary)]" : "text-[var(--text-secondary)] group-hover:text-white"
+          active ? "text-[var(--primary)]" : "text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]"
         )}
       >
         <Icon size={17} />
@@ -336,7 +336,7 @@ function SidebarItem({
     return (
       <Tooltip>
         <TooltipTrigger asChild>{content}</TooltipTrigger>
-        <TooltipContent side="right" className="bg-[#0F0F12] border border-white/10 text-white text-xs py-1.5 px-3 rounded-lg shadow-xl">
+        <TooltipContent side="right" className="bg-[var(--surface-elevated)] border border-[var(--card-border)] text-[var(--text-primary)] text-xs py-1.5 px-3 rounded-lg shadow-xl">
           {item.label}
         </TooltipContent>
       </Tooltip>

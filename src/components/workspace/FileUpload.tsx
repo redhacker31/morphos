@@ -91,7 +91,7 @@ export default function FileUpload({ isOpen, onClose }: FileUploadProps) {
           <h3 className="text-sm font-semibold">Upload Files</h3>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--hover-overlay)] hover:text-[var(--text-primary)] transition-colors"
             aria-label="Close upload"
           >
             <X size={16} />
@@ -154,7 +154,7 @@ export default function FileUpload({ isOpen, onClose }: FileUploadProps) {
                       <div className="text-sm font-medium truncate">{file.name}</div>
                       <div className="text-xs text-[var(--text-muted)]">{file.size}</div>
                       {file.progress < 100 && (
-                        <div className="mt-1.5 h-1 rounded-full bg-white/5 overflow-hidden">
+                        <div className="mt-1.5 h-1 rounded-full bg-[var(--hover-overlay)] overflow-hidden">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${file.progress}%` }}

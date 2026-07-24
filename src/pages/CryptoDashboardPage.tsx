@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { CryptoBentoDashboard } from "@/components/dashboard/CryptoBentoDashboard";
+import { ShaderBackground } from "@/components/backgrounds/ShaderBackground";
 import { useSession } from "@/hooks/useSession";
 import { useCryptoPortfolio } from "@/hooks/useCryptoPortfolio";
 
@@ -11,13 +12,14 @@ export default function CryptoDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] relative overflow-hidden">
+      <ShaderBackground className="pointer-events-none absolute inset-0 opacity-30 mix-blend-multiply" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-radial opacity-70" />
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
 
       <div className="relative max-w-5xl mx-auto px-4 md:px-8 py-10 md:py-14">
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors mb-6"
         >
           <ArrowLeft size={14} />
           Back to home
@@ -35,7 +37,7 @@ export default function CryptoDashboardPage() {
               Showcase
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight">
             Crypto Portfolio Bento
           </h1>
           <p className="text-[var(--text-secondary)] text-sm mt-1 max-w-xl">
@@ -47,7 +49,7 @@ export default function CryptoDashboardPage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-56 rounded-3xl border border-white/10 bg-white/[0.03] skeleton" />
+              <div key={i} className="h-56 rounded-3xl border border-[var(--card-border)] bg-[var(--hover-overlay)] skeleton" />
             ))}
           </div>
         ) : (

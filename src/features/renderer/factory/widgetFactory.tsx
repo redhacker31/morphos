@@ -85,9 +85,9 @@ export const WidgetFactory = memo(function WidgetFactory({
 
   if (!entry) {
     return (
-      <div className="w-full h-full rounded-2xl bg-amber-500/10 border border-amber-500/30 p-5 space-y-2 backdrop-blur-xl text-amber-200 text-xs flex flex-col justify-center items-center text-center">
-        <AlertTriangle size={24} className="text-amber-400" />
-        <div className="font-bold text-white">Unknown Widget Type: &quot;{node.type}&quot;</div>
+      <div className="w-full h-full rounded-2xl bg-amber-500/10 border border-amber-500/30 p-5 space-y-2 backdrop-blur-xl text-amber-700 text-xs flex flex-col justify-center items-center text-center">
+        <AlertTriangle size={24} className="text-amber-600" />
+        <div className="font-bold text-[var(--text-primary)]">Unknown Widget Type: &quot;{node.type}&quot;</div>
         <div className="text-[10px] text-[var(--text-muted)]">
           The specified widget type is not registered in the WidgetRegistry.
         </div>

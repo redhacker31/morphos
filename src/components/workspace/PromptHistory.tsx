@@ -152,7 +152,7 @@ function HistoryItem({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.2 }}
-      className="group flex items-start gap-3 p-3 rounded-lg hover:bg-white/[0.03] cursor-pointer transition-colors mb-1"
+      className="group flex items-start gap-3 p-3 rounded-lg hover:bg-[var(--hover-overlay)] cursor-pointer transition-colors mb-1"
       onClick={() => onSelect?.(item.text)}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
@@ -207,7 +207,7 @@ function HistoryItem({
             e.stopPropagation();
             onDelete(item.id);
           }}
-          className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:text-red-400 transition-colors cursor-pointer"
+          className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:text-red-500 transition-colors cursor-pointer"
           aria-label="Delete"
         >
           <Trash2 size={13} />

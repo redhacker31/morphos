@@ -27,10 +27,10 @@ export const CardWidget = memo(function CardWidget({
   children,
 }: BaseWidgetProps & { children?: React.ReactNode }) {
   return (
-    <div className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 space-y-3 backdrop-blur-xl hover:border-white/20 transition-all">
+    <div className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-[var(--card-border)] p-5 space-y-3 backdrop-blur-xl hover:border-[var(--card-border-hover)] transition-all">
       {title && (
-        <div className="border-b border-white/10 pb-2">
-          <h4 className="text-xs font-bold text-white">{title}</h4>
+        <div className="border-b border-[var(--card-border)] pb-2">
+          <h4 className="text-xs font-bold text-[var(--text-primary)]">{title}</h4>
           {description && <p className="text-[10px] text-[var(--text-muted)]">{description}</p>}
         </div>
       )}

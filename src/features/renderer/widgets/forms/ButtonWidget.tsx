@@ -36,7 +36,7 @@ export const ButtonWidget = memo(function ButtonWidget({
 
   const btnStyle =
     variant === "secondary"
-      ? "bg-white/10 hover:bg-white/20 text-white border border-white/15"
+      ? "bg-[var(--active-overlay)] hover:bg-[var(--card-border-hover)] text-[var(--text-primary)] border border-[var(--card-border)]"
       : variant === "outline"
       ? "bg-transparent border border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)]/10"
       : "bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white hover:opacity-90 shadow-md";

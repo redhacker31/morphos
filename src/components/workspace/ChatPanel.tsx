@@ -221,7 +221,7 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
             </div>
             <button
               onClick={onClose}
-              className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--hover-overlay)] hover:text-[var(--text-primary)] transition-colors"
               aria-label="Close chat"
             >
               <X size={16} />
@@ -287,8 +287,8 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
             ))}
 
             {error && (
-              <div className="flex items-start gap-2 text-[11px] text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
-                <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-400" />
+              <div className="flex items-start gap-2 text-[11px] text-red-600 bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
+                <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-500" />
                 <span>{error}</span>
               </div>
             )}

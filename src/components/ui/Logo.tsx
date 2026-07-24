@@ -29,7 +29,7 @@ export function Logo({ collapsed = false, className, size = "md" }: LogoProps) {
         <div className="absolute inset-0 blur-lg bg-[var(--primary-glow)] rounded-full opacity-40" />
       </div>
       {!collapsed && (
-        <span className={cn("font-bold tracking-tight text-white", text)}>
+        <span className={cn("font-bold tracking-tight text-[var(--text-primary)]", text)}>
           MorphOS
         </span>
       )}

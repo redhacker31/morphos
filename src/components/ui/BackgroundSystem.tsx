@@ -1,10 +1,16 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { LightPillar } from "@/components/backgrounds/LightPillar";
 
 export function BackgroundSystem() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 select-none">
+      {/* Animated indigo→pink light pillar (light-pillar reference) */}
+      <div className="absolute inset-0 opacity-50 mix-blend-multiply">
+        <LightPillar intensity={0.6} pillarWidth={3.2} mixBlendMode="normal" />
+      </div>
+
       {/* Drifting Ambient Gradient Orbs */}
       <motion.div
         animate={{

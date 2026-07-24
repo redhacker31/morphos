@@ -47,13 +47,13 @@ export default function TopNav({
   };
 
   return (
-    <header className="h-14 flex items-center justify-between px-4 sm:px-6 border-b border-white/10 bg-[var(--surface-elevated)]/80 backdrop-blur-xl shrink-0 z-[1010] relative select-none">
+    <header className="h-14 flex items-center justify-between px-4 sm:px-6 border-b border-[var(--card-border)] bg-[var(--surface-elevated)]/80 backdrop-blur-xl shrink-0 z-[1010] relative select-none">
       {/* Left — Workspace Switcher & Breadcrumbs */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-[var(--text-muted)]">Workspace</span>
-          <span className="text-white/20 text-xs">/</span>
-          <span className="text-xs font-bold text-white tracking-tight flex items-center gap-1.5">
+          <span className="text-[var(--text-muted)] text-xs">/</span>
+          <span className="text-xs font-bold text-[var(--text-primary)] tracking-tight flex items-center gap-1.5">
             <FolderOpen size={13} className="text-[var(--primary)]" />
             <span>{projectName}</span>
           </span>
@@ -70,13 +70,13 @@ export default function TopNav({
       <div className="relative hidden md:block w-72">
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between bg-white/[0.03] border border-white/10 hover:border-white/20 rounded-xl px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white transition-all cursor-pointer group shadow-inner"
+          className="w-full flex items-center justify-between bg-[var(--hover-overlay)] border border-[var(--card-border)] hover:border-[var(--card-border-hover)] rounded-xl px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all cursor-pointer group shadow-inner"
         >
           <div className="flex items-center gap-2">
             <Search size={14} className="text-[var(--primary)] group-hover:scale-110 transition-transform" />
             <span>Search or command...</span>
           </div>
-          <kbd className="text-[9px] font-mono bg-white/10 px-1.5 py-0.5 rounded border border-white/10 text-white font-bold">
+          <kbd className="text-[9px] font-mono bg-[var(--active-overlay)] px-1.5 py-0.5 rounded border border-[var(--card-border)] text-[var(--text-primary)] font-bold">
             ⌘K
           </kbd>
         </button>
@@ -93,7 +93,7 @@ export default function TopNav({
         {/* Command Button for Mobile/Tablet */}
         <button
           onClick={onOpenCommandPalette}
-          className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white transition-colors cursor-pointer"
+          className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-[var(--card-border)] bg-[var(--hover-overlay)] text-[var(--text-primary)] transition-colors cursor-pointer"
           title="Open Command Palette"
         >
           <Command size={14} />
@@ -102,7 +102,7 @@ export default function TopNav({
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-lg border border-[var(--card-border)] bg-[var(--hover-overlay)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
           aria-label="Toggle theme"
           title="Toggle Theme"
         >
@@ -113,7 +113,7 @@ export default function TopNav({
         <div className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative w-8 h-8 flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+            className="relative w-8 h-8 flex items-center justify-center rounded-lg border border-[var(--card-border)] bg-[var(--hover-overlay)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             aria-label="Notifications"
           >
             <Bell size={15} />
@@ -121,18 +121,18 @@ export default function TopNav({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 top-11 w-72 rounded-2xl bg-[var(--surface-elevated)] border border-white/15 shadow-2xl p-4 space-y-3 z-30">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-xs font-bold text-white">Notifications</span>
+            <div className="absolute right-0 top-11 w-72 rounded-2xl bg-[var(--surface-elevated)] border border-[var(--card-border)] shadow-2xl p-4 space-y-3 z-30">
+              <div className="flex items-center justify-between border-b border-[var(--card-border)] pb-2">
+                <span className="text-xs font-bold text-[var(--text-primary)]">Notifications</span>
                 <span className="text-[10px] text-[var(--primary)] font-semibold">2 New</span>
               </div>
               <div className="space-y-2 text-xs">
-                <div className="p-2 rounded-lg bg-white/5 space-y-1">
-                  <div className="font-semibold text-white">Phase 1 Foundation Locked</div>
+                <div className="p-2 rounded-lg bg-[var(--hover-overlay)] space-y-1">
+                  <div className="font-semibold text-[var(--text-primary)]">Phase 1 Foundation Locked</div>
                   <div className="text-[10px] text-[var(--text-muted)]">Workspace shell production-ready.</div>
                 </div>
-                <div className="p-2 rounded-lg bg-white/5 space-y-1">
-                  <div className="font-semibold text-white">Zod AST Schema Verified</div>
+                <div className="p-2 rounded-lg bg-[var(--hover-overlay)] space-y-1">
+                  <div className="font-semibold text-[var(--text-primary)]">Zod AST Schema Verified</div>
                   <div className="text-[10px] text-[var(--text-muted)]">AppSchema ready for Phase 2 renderer.</div>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function TopNav({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 hover:opacity-85 transition-opacity cursor-pointer">
-              <Avatar className="w-8 h-8 border border-white/20 rounded-xl">
+              <Avatar className="w-8 h-8 border border-[var(--card-border-hover)] rounded-xl">
                 <AvatarFallback className="bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] text-white text-xs font-extrabold rounded-xl">
                   G
                 </AvatarFallback>
@@ -153,15 +153,15 @@ export default function TopNav({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-52 bg-[var(--surface-elevated)] border border-white/15 text-white text-xs p-1"
+            className="w-52 bg-[var(--surface-elevated)] border border-[var(--card-border)] text-[var(--text-primary)] text-xs p-1"
           >
-            <div className="px-3 py-2 border-b border-white/10">
-              <div className="font-bold text-white">Guest</div>
+            <div className="px-3 py-2 border-b border-[var(--card-border)]">
+              <div className="font-bold text-[var(--text-primary)]">Guest</div>
               <div className="text-[10px] text-[var(--text-muted)] font-mono">anon · {shortId}</div>
             </div>
-            <DropdownMenuItem className="cursor-pointer focus:bg-white/10 rounded-lg">Workspace Settings</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer focus:bg-white/10 rounded-lg">Design System Tokens</DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-white/10" />
+            <DropdownMenuItem className="cursor-pointer focus:bg-[var(--active-overlay)] rounded-lg">Workspace Settings</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer focus:bg-[var(--active-overlay)] rounded-lg">Design System Tokens</DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-[var(--active-overlay)]" />
             <DropdownMenuItem
               className="cursor-pointer focus:bg-red-500/10 text-red-400 rounded-lg"
               onSelect={() => onSignOut?.()}

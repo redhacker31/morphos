@@ -62,7 +62,7 @@ export function BarChartWidget({
       onClick={() =>
         onWidgetEvent?.({ widgetId: id, eventType: "onSelect", timestamp: Date.now(), payload: { id } })
       }
-      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 backdrop-blur-xl flex flex-col shadow-elev-2 hover:border-white/20 hover:shadow-elev-3 transition-all duration-300 group"
+      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-[var(--card-border)] p-5 backdrop-blur-xl flex flex-col shadow-elev-2 hover:border-[var(--card-border-hover)] hover:shadow-elev-3 transition-all duration-300 group"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">

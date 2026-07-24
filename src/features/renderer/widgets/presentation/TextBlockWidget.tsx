@@ -32,12 +32,12 @@ export function TextBlockWidget({
   const content = (config.content as string) || (TextBlockWidgetMetadata.defaultConfig.content as string);
 
   return (
-    <div className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 space-y-2 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all">
+    <div className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-[var(--card-border)] p-5 space-y-2 backdrop-blur-xl flex flex-col justify-between hover:border-[var(--card-border-hover)] transition-all">
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-[var(--primary)]">
+        <div className="w-6 h-6 rounded-md bg-[var(--hover-overlay)] flex items-center justify-center text-[var(--primary)]">
           <AlignLeft size={13} />
         </div>
-        <h4 className="text-xs font-bold text-white">{title}</h4>
+        <h4 className="text-xs font-bold text-[var(--text-primary)]">{title}</h4>
       </div>
       <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
         {content}

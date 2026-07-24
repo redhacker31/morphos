@@ -22,5 +22,5 @@ export const DividerWidgetMetadata: WidgetMetadata = {
 };
 
 export const DividerWidget = memo(function DividerWidget() {
-  return <div className="w-full my-4 border-t border-white/10" />;
+  return <div className="w-full my-4 border-t border-[var(--card-border)]" />;
 });

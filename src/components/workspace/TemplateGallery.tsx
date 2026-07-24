@@ -76,7 +76,7 @@ export default function TemplateGallery({ isOpen, onClose, onSelect }: TemplateG
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-[var(--text-muted)] hover:bg-[var(--hover-overlay)] hover:text-[var(--text-primary)] transition-colors"
             aria-label="Close gallery"
           >
             <X size={18} />
@@ -93,7 +93,7 @@ export default function TemplateGallery({ isOpen, onClose, onSelect }: TemplateG
                 "px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all",
                 activeCategory === cat
                   ? "bg-[var(--primary-subtle)] text-[var(--primary)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-white/5"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--hover-overlay)]"
               )}
             >
               {cat}

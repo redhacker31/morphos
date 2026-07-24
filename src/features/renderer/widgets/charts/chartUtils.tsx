@@ -15,10 +15,10 @@ export const VIZ_PALETTE = [
 ];
 
 /** Concrete chart-internal colors that mirror text tokens (SVG-safe). */
-export const CHART_TICK = "#71717a"; // --text-muted
-export const CHART_GRID = "rgba(255,255,255,0.06)";
-export const CHART_CURSOR = "rgba(255,255,255,0.05)";
-export const CHART_SURFACE = "#18181f"; // --surface-elevated
+export const CHART_TICK = "#5b5b7a"; // --text-secondary
+export const CHART_GRID = "rgba(82,39,255,0.08)";
+export const CHART_CURSOR = "rgba(82,39,255,0.06)";
+export const CHART_SURFACE = "#ffffff"; // --surface-elevated
 
 interface TooltipEntry {
   name?: string;
@@ -38,7 +38,7 @@ interface ChartTooltipProps {
 export function ChartTooltip({ active, payload, label }: ChartTooltipProps) {
   if (!active || !payload || payload.length === 0) return null;
   return (
-    <div className="rounded-xl border border-white/10 bg-[var(--surface-elevated)]/95 backdrop-blur-xl px-3 py-2 shadow-elev-3">
+    <div className="rounded-xl border border-[var(--card-border)] bg-white/90 backdrop-blur-xl px-3 py-2 shadow-elev-3">
       {label != null && label !== "" && (
         <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">
           {label}

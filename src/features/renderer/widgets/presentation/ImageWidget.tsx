@@ -34,7 +34,7 @@ export const ImageWidget = memo(function ImageWidget({
 
   if (!src) {
     return (
-      <div className="w-full h-40 rounded-2xl bg-white/5 border border-dashed border-white/15 flex flex-col items-center justify-center text-[var(--text-muted)] space-y-2">
+      <div className="w-full h-40 rounded-2xl bg-[var(--hover-overlay)] border border-dashed border-[var(--card-border)] flex flex-col items-center justify-center text-[var(--text-muted)] space-y-2">
         <ImageIcon size={28} />
         <span className="text-xs">{title}</span>
       </div>
@@ -42,7 +42,7 @@ export const ImageWidget = memo(function ImageWidget({
   }
 
   return (
-    <div className="w-full rounded-2xl overflow-hidden border border-white/10">
+    <div className="w-full rounded-2xl overflow-hidden border border-[var(--card-border)]">
       <img src={src} alt={alt} className="w-full h-auto object-cover" />
     </div>
   );

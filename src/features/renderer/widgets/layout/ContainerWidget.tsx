@@ -26,8 +26,8 @@ export const ContainerWidget = memo(function ContainerWidget({
   children,
 }: BaseWidgetProps & { children?: React.ReactNode }) {
   return (
-    <div className="w-full rounded-2xl bg-[var(--surface-elevated)]/60 border border-white/10 p-5 space-y-4 backdrop-blur-xl">
-      {title && <h4 className="text-xs font-bold text-white uppercase tracking-wider">{title}</h4>}
+    <div className="w-full rounded-2xl bg-[var(--surface-elevated)]/60 border border-[var(--card-border)] p-5 space-y-4 backdrop-blur-xl">
+      {title && <h4 className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">{title}</h4>}
       <div className="w-full space-y-4">{children}</div>
     </div>
   );

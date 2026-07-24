@@ -34,11 +34,11 @@ export const EmptyStateWidget = memo(function EmptyStateWidget({
   const displayDesc = description || (config?.description as string);
 
   return (
-    <div className="w-full h-44 rounded-2xl bg-[var(--surface-elevated)]/40 border border-dashed border-white/15 p-6 flex flex-col items-center justify-center text-center space-y-2 backdrop-blur-xl">
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[var(--text-muted)]">
+    <div className="w-full h-44 rounded-2xl bg-[var(--surface-elevated)]/40 border border-dashed border-[var(--card-border)] p-6 flex flex-col items-center justify-center text-center space-y-2 backdrop-blur-xl">
+      <div className="w-10 h-10 rounded-xl bg-[var(--hover-overlay)] flex items-center justify-center text-[var(--text-muted)]">
         <Layers size={20} />
       </div>
-      <h5 className="text-xs font-bold text-white">{displayTitle}</h5>
+      <h5 className="text-xs font-bold text-[var(--text-primary)]">{displayTitle}</h5>
       <p className="text-[10px] text-[var(--text-muted)] max-w-xs">{displayDesc}</p>
     </div>
   );

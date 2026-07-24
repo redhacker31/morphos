@@ -34,8 +34,8 @@ export function WorkspaceSurface({
 
             {/* Reserved Phase 2 Renderer Slot */}
             {rendererSlot && (
-              <div className="w-full rounded-3xl border border-white/10 bg-black/40 p-6 backdrop-blur-xl relative">
-                <div className="text-[10px] font-mono text-[var(--primary)] uppercase tracking-wider mb-4 border-b border-white/10 pb-2 flex items-center justify-between">
+              <div className="w-full rounded-3xl border border-[var(--card-border)] bg-[var(--surface)]/60 p-6 backdrop-blur-xl relative">
+                <div className="text-[10px] font-mono text-[var(--primary)] uppercase tracking-wider mb-4 border-b border-[var(--card-border)] pb-2 flex items-center justify-between">
                   <span>RESERVED PHASE 2 DYNAMIC RENDERER SURFACE</span>
                   <span className="w-2 h-2 rounded-full bg-[var(--primary)] animate-pulse" />
                 </div>

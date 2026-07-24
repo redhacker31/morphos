@@ -73,13 +73,13 @@ export function RecentProjects({
         </h3>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-white/5 rounded-lg border border-white/10 p-0.5">
+          <div className="flex items-center bg-[var(--hover-overlay)] rounded-lg border border-[var(--card-border)] p-0.5">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1 rounded-md text-xs transition-all cursor-pointer ${
                 viewMode === "grid"
-                  ? "bg-[var(--surface-elevated)] text-white shadow"
-                  : "text-[var(--text-muted)] hover:text-white"
+                  ? "bg-[var(--surface-elevated)] text-[var(--text-primary)] shadow"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
               title="Grid View"
             >
@@ -89,8 +89,8 @@ export function RecentProjects({
               onClick={() => setViewMode("list")}
               className={`p-1 rounded-md text-xs transition-all cursor-pointer ${
                 viewMode === "list"
-                  ? "bg-[var(--surface-elevated)] text-white shadow"
-                  : "text-[var(--text-muted)] hover:text-white"
+                  ? "bg-[var(--surface-elevated)] text-[var(--text-primary)] shadow"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
               title="List View"
             >
@@ -101,16 +101,16 @@ export function RecentProjects({
       </div>
 
       {loading ? (
-        <div className="rounded-2xl border border-white/10 p-10 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+        <div className="rounded-2xl border border-[var(--card-border)] p-10 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
           <Loader2 size={16} className="animate-spin" />
           Loading your projects...
         </div>
       ) : projects.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center space-y-3">
-          <div className="w-12 h-12 rounded-xl bg-white/5 mx-auto flex items-center justify-center text-[var(--text-muted)]">
+        <div className="rounded-2xl border border-dashed border-[var(--card-border)] p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-xl bg-[var(--hover-overlay)] mx-auto flex items-center justify-center text-[var(--text-muted)]">
             <FolderOpen size={20} />
           </div>
-          <h4 className="text-sm font-bold text-white">No Recent Projects</h4>
+          <h4 className="text-sm font-bold text-[var(--text-primary)]">No Recent Projects</h4>
           <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
             Generate your first application by describing it in the prompt studio above or selecting a quick start template.
           </p>
@@ -127,13 +127,13 @@ export function RecentProjects({
                 exit={{ opacity: 0, scale: 0.95 }}
                 whileHover={{ y: -2 }}
                 onClick={() => onOpen(project)}
-                className="glass p-5 rounded-2xl border border-white/[0.05] hover:border-white/20 transition-all cursor-pointer flex flex-col justify-between h-36 group relative"
+                className="glass p-5 rounded-2xl border border-[var(--card-border)] hover:border-[var(--card-border-hover)] transition-all cursor-pointer flex flex-col justify-between h-36 group relative"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-[var(--primary)] shadow-[0_0_8px_var(--primary-glow)]" />
                     <div>
-                      <h4 className="text-xs font-bold text-white group-hover:text-[var(--primary)] transition-colors truncate max-w-[200px]">
+                      <h4 className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors truncate max-w-[200px]">
                         {project.title}
                       </h4>
                       <span className="text-[10px] text-[var(--text-muted)]">
@@ -148,10 +148,10 @@ export function RecentProjects({
                         e.stopPropagation();
                         onToggleFavorite(project.id, !project.is_favorite);
                       }}
-                      className={`p-1 rounded-md hover:bg-white/10 transition-colors cursor-pointer ${
+                      className={`p-1 rounded-md hover:bg-[var(--active-overlay)] transition-colors cursor-pointer ${
                         project.is_favorite
                           ? "text-amber-400"
-                          : "text-[var(--text-muted)] hover:text-white"
+                          : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                       }`}
                     >
                       <Star size={14} fill={project.is_favorite ? "currentColor" : "none"} />
@@ -163,20 +163,20 @@ export function RecentProjects({
                           e.stopPropagation();
                           setActiveMenuId(activeMenuId === project.id ? null : project.id);
                         }}
-                        className="p-1 rounded-md text-[var(--text-muted)] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                        className="p-1 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--active-overlay)] transition-colors cursor-pointer"
                       >
                         <MoreVertical size={14} />
                       </button>
 
                       {activeMenuId === project.id && (
-                        <div className="absolute right-0 top-6 w-36 rounded-xl bg-[var(--surface-elevated)] border border-white/15 shadow-xl p-1 z-20 space-y-0.5">
+                        <div className="absolute right-0 top-6 w-36 rounded-xl bg-[var(--surface-elevated)] border border-[var(--card-border)] shadow-xl p-1 z-20 space-y-0.5">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               onDuplicate(project);
                               setActiveMenuId(null);
                             }}
-                            className="w-full text-left px-3 py-1.5 rounded-lg text-[11px] text-[var(--text-secondary)] hover:text-white hover:bg-white/10 flex items-center gap-2 cursor-pointer"
+                            className="w-full text-left px-3 py-1.5 rounded-lg text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--active-overlay)] flex items-center gap-2 cursor-pointer"
                           >
                             <Copy size={12} /> Duplicate
                           </button>
@@ -186,7 +186,7 @@ export function RecentProjects({
                               onDelete(project.id);
                               setActiveMenuId(null);
                             }}
-                            className="w-full text-left px-3 py-1.5 rounded-lg text-[11px] text-red-400 hover:bg-red-500/10 flex items-center gap-2 cursor-pointer"
+                            className="w-full text-left px-3 py-1.5 rounded-lg text-[11px] text-red-500 hover:bg-red-500/10 flex items-center gap-2 cursor-pointer"
                           >
                             <Trash2 size={12} /> Delete
                           </button>
@@ -196,9 +196,9 @@ export function RecentProjects({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] pt-3 border-t border-white/[0.05]">
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] pt-3 border-t border-[var(--card-border)]">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-white font-medium">
+                    <span className="px-2 py-0.5 rounded-full bg-[var(--hover-overlay)] border border-[var(--card-border)] text-[var(--text-primary)] font-medium">
                       {project.status}
                     </span>
                     <span>{project.node_count || 0} Widgets</span>
@@ -215,7 +215,7 @@ export function RecentProjects({
             <div
               key={project.id}
               onClick={() => onOpen(project)}
-              className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/5 hover:border-white/10 transition-all cursor-pointer group"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--hover-overlay)] border border-[var(--card-border)] hover:bg-[var(--hover-overlay)] hover:border-[var(--card-border)] transition-all cursor-pointer group"
             >
               <div className="flex items-center gap-3">
                 <button
@@ -228,7 +228,7 @@ export function RecentProjects({
                   <Star size={14} fill={project.is_favorite ? "currentColor" : "none"} />
                 </button>
                 <div>
-                  <h4 className="text-xs font-bold text-white group-hover:text-[var(--primary)] transition-colors">
+                  <h4 className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">
                     {project.title}
                   </h4>
                   <div className="text-[10px] text-[var(--text-muted)] flex items-center gap-2">
@@ -241,7 +241,7 @@ export function RecentProjects({
 
               <div className="flex items-center gap-4 text-[11px] text-[var(--text-muted)]">
                 <span>{relTime(project.updated_at || project.created_at)}</span>
-                <span className="px-2 py-0.5 rounded bg-white/5 text-white text-[10px]">
+                <span className="px-2 py-0.5 rounded bg-[var(--hover-overlay)] text-[var(--text-primary)] text-[10px]">
                   {project.status}
                 </span>
               </div>

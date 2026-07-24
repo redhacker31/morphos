@@ -43,7 +43,7 @@ export function MetricCardWidget({
   return (
     <div
       onClick={() => onWidgetEvent?.({ widgetId: id, eventType: "onSelect", timestamp: Date.now(), payload: { id } })}
-      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 backdrop-blur-xl flex flex-col justify-between shadow-elev-2 hover:border-white/20 hover:shadow-elev-3 transition-all duration-300 group cursor-pointer overflow-hidden relative"
+      className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-[var(--card-border)] p-5 backdrop-blur-xl flex flex-col justify-between shadow-elev-2 hover:border-[var(--card-border-hover)] hover:shadow-elev-3 transition-all duration-300 group cursor-pointer overflow-hidden relative"
     >
       <div className="pointer-events-none absolute -top-16 -right-16 w-40 h-40 rounded-full bg-[var(--primary)]/10 blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
 

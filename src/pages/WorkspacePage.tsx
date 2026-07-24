@@ -240,7 +240,7 @@ export default function WorkspacePage() {
                     <Eye size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white">
+                    <h4 className="text-xs font-bold text-[var(--text-primary)]">
                       {activeAst ? "Live AI-Generated Application" : "Dynamic Renderer Engine"}
                     </h4>
                     <p className="text-[11px] text-[var(--text-secondary)]">
@@ -264,12 +264,12 @@ export default function WorkspacePage() {
                 <div className="rounded-2xl border border-red-500/40 bg-red-500/10 p-4 flex items-start gap-3 backdrop-blur-xl">
                   <AlertCircle size={18} className="text-red-400 shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-bold text-white">Generation failed</h4>
+                    <h4 className="text-xs font-bold text-[var(--text-primary)]">Generation failed</h4>
                     <p className="text-[11px] text-red-300/90 break-words">{genError}</p>
                   </div>
                   <button
                     onClick={() => setGenError(null)}
-                    className="text-red-400 hover:text-white transition-colors shrink-0"
+                    className="text-red-500 hover:text-[var(--text-primary)] transition-colors shrink-0"
                     aria-label="Dismiss error"
                   >
                     <X size={16} />
@@ -308,7 +308,7 @@ export default function WorkspacePage() {
               </AnimatePresence>
 
               {/* Quick Start Templates */}
-              <div className="pt-6 border-t border-white/10">
+              <div className="pt-6 border-t border-[var(--card-border)]">
                 <QuickStart
                   onSelectTemplate={handleSelectTemplate}
                   onBrowseAll={() => setShowTemplatesModal(true)}
@@ -316,7 +316,7 @@ export default function WorkspacePage() {
               </div>
 
               {/* Recent Projects Manager */}
-              <div className="pt-6 border-t border-white/10">
+              <div className="pt-6 border-t border-[var(--card-border)]">
                 <RecentProjects
                   projects={projectsHook.projects}
                   loading={projectsHook.loading}
@@ -364,14 +364,14 @@ export default function WorkspacePage() {
             <div className="py-4 space-y-6">
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                  <h2 className="text-base font-bold text-white">Crypto Portfolio Bento</h2>
+                  <h2 className="text-base font-bold text-[var(--text-primary)]">Crypto Portfolio Bento</h2>
                   <p className="text-xs text-[var(--text-secondary)]">
                     Live data persisted to your Enter Cloud portfolio.
                   </p>
                 </div>
                 <button
                   onClick={() => setActiveView("workspace")}
-                  className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-xs font-semibold text-[var(--text-secondary)] hover:text-white hover:border-white/20 transition-all"
+                  className="px-3 py-1.5 rounded-xl border border-[var(--card-border)] bg-[var(--hover-overlay)] text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--card-border-hover)] transition-all"
                 >
                   Back to Workspace
                 </button>
@@ -381,7 +381,7 @@ export default function WorkspacePage() {
                   {[0, 1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="h-56 rounded-3xl border border-white/10 bg-white/[0.03] skeleton"
+                      className="h-56 rounded-3xl border border-[var(--card-border)] bg-[var(--hover-overlay)] skeleton"
                     />
                   ))}
                 </div>

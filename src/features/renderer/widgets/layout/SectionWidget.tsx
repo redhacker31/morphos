@@ -27,9 +27,9 @@ export const SectionWidget = memo(function SectionWidget({
   children,
 }: BaseWidgetProps & { children?: React.ReactNode }) {
   return (
-    <div className="w-full space-y-4 py-2 border-t border-white/10 pt-4">
+    <div className="w-full space-y-4 py-2 border-t border-[var(--card-border)] pt-4">
       <div>
-        <h3 className="text-sm font-extrabold text-white uppercase tracking-wider">{title}</h3>
+        <h3 className="text-sm font-extrabold text-[var(--text-primary)] uppercase tracking-wider">{title}</h3>
         {description && <p className="text-xs text-[var(--text-muted)]">{description}</p>}
       </div>
       <div className="w-full">{children}</div>

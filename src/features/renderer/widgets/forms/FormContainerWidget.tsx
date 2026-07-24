@@ -54,13 +54,13 @@ export function FormContainerWidget({
   };
 
   return (
-    <div className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 p-5 space-y-4 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all">
-      <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+    <div className="w-full h-full rounded-2xl bg-[var(--surface-elevated)]/90 border border-[var(--card-border)] p-5 space-y-4 backdrop-blur-xl flex flex-col justify-between hover:border-[var(--card-border-hover)] transition-all">
+      <div className="flex items-center gap-2 border-b border-[var(--card-border)] pb-3">
         <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/15 flex items-center justify-center text-[var(--accent)]">
           <FileText size={16} />
         </div>
         <div>
-          <h4 className="text-xs font-bold text-white">{title}</h4>
+          <h4 className="text-xs font-bold text-[var(--text-primary)]">{title}</h4>
           {description && <p className="text-[10px] text-[var(--text-muted)]">{description}</p>}
         </div>
       </div>
@@ -74,7 +74,7 @@ export function FormContainerWidget({
               placeholder={field.placeholder || ""}
               value={formData[field.name] || ""}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)]"
+              className="w-full bg-[var(--hover-overlay)] border border-[var(--card-border)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)]"
             />
           </div>
         ))}

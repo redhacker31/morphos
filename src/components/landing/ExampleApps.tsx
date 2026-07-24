@@ -71,11 +71,11 @@ export function ExampleApps() {
     <section className="py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-elevated)] border border-white/10 text-xs font-semibold text-[var(--accent)]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-elevated)] border border-[var(--card-border)] text-xs font-semibold text-[var(--accent)]">
             <Layout size={14} />
             <span>Structured Generation Output</span>
           </div>
-          <h2 className="text-3xl font-extrabold text-white md:text-5xl tracking-tight">
+          <h2 className="text-3xl font-extrabold text-[var(--text-primary)] md:text-5xl tracking-tight">
             Generated Applications in Seconds
           </h2>
           <p className="text-base text-[var(--text-secondary)]">
@@ -94,8 +94,8 @@ export function ExampleApps() {
                 onClick={() => setActiveTab(app.id)}
                 className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
                   isActive
-                    ? "bg-[var(--surface-elevated)] text-white border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
-                    : "bg-transparent text-[var(--text-secondary)] border-white/5 hover:text-white hover:border-white/10"
+                    ? "bg-[var(--surface-elevated)] text-[var(--text-primary)] border-[var(--card-border-hover)] shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
+                    : "bg-transparent text-[var(--text-secondary)] border-[var(--card-border)] hover:text-[var(--text-primary)] hover:border-[var(--card-border)]"
                 }`}
               >
                 <Icon size={16} style={{ color: app.color }} />
@@ -113,7 +113,7 @@ export function ExampleApps() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="rounded-3xl bg-[var(--surface)] border border-white/10 p-8 lg:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden"
+            className="rounded-3xl bg-[var(--surface)] border border-[var(--card-border)] p-8 lg:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Info Column */}
@@ -128,7 +128,7 @@ export function ExampleApps() {
                   >
                     {selectedApp.category}
                   </span>
-                  <h3 className="text-2xl lg:text-3xl font-extrabold text-white">
+                  <h3 className="text-2xl lg:text-3xl font-extrabold text-[var(--text-primary)]">
                     {selectedApp.name}
                   </h3>
                   <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -137,13 +137,13 @@ export function ExampleApps() {
                 </div>
 
                 {/* Key Metrics */}
-                <div className="grid grid-cols-3 gap-3 pt-4 border-t border-white/10">
+                <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[var(--card-border)]">
                   {selectedApp.metrics.map((metric, i) => (
                     <div key={i} className="space-y-1">
                       <div className="text-[10px] text-[var(--text-muted)] font-medium">
                         {metric.label}
                       </div>
-                      <div className="text-lg font-extrabold text-white">
+                      <div className="text-lg font-extrabold text-[var(--text-primary)]">
                         {metric.value}
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export function ExampleApps() {
                     {selectedApp.widgets.map((widget, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-2 text-xs text-[var(--text-secondary)] bg-white/[0.03] px-3 py-2 rounded-lg border border-white/5"
+                        className="flex items-center gap-2 text-xs text-[var(--text-secondary)] bg-[var(--hover-overlay)] px-3 py-2 rounded-lg border border-[var(--card-border)]"
                       >
                         <CheckCircle2 size={13} className="text-[var(--success)] shrink-0" />
                         <span className="truncate">{widget}</span>
@@ -171,15 +171,15 @@ export function ExampleApps() {
 
               {/* Visual Preview Frame Column */}
               <div className="lg:col-span-7">
-                <div className="rounded-2xl bg-black/60 border border-white/10 p-5 space-y-4 shadow-2xl relative">
+                <div className="rounded-2xl bg-[var(--background-secondary)] border border-[var(--card-border)] p-5 space-y-4 shadow-2xl relative">
                   {/* Window Bar */}
-                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center justify-between border-b border-[var(--card-border)] pb-3">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-red-500/80" />
                       <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                       <div className="w-3 h-3 rounded-full bg-green-500/80" />
                     </div>
-                    <div className="text-[11px] font-mono text-[var(--text-muted)] bg-white/5 px-3 py-0.5 rounded-full border border-white/5">
+                    <div className="text-[11px] font-mono text-[var(--text-muted)] bg-[var(--hover-overlay)] px-3 py-0.5 rounded-full border border-[var(--card-border)]">
                       morphos://ast.app.{selectedApp.id}
                     </div>
                     <div className="text-[10px] text-[var(--success)] font-mono flex items-center gap-1.5">
@@ -190,9 +190,9 @@ export function ExampleApps() {
 
                   {/* Mock Widget Layout Grid */}
                   <div className="grid grid-cols-12 gap-3 min-h-[260px]">
-                    <div className="col-span-8 rounded-xl bg-white/[0.04] border border-white/10 p-4 space-y-3 flex flex-col justify-between">
+                    <div className="col-span-8 rounded-xl bg-[var(--hover-overlay)] border border-[var(--card-border)] p-4 space-y-3 flex flex-col justify-between">
                       <div className="flex justify-between items-center">
-                        <div className="text-xs font-bold text-white flex items-center gap-2">
+                        <div className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-2">
                           <selectedApp.icon size={14} style={{ color: selectedApp.color }} />
                           <span>Primary Performance Metric</span>
                         </div>
@@ -210,14 +210,14 @@ export function ExampleApps() {
                     </div>
 
                     <div className="col-span-4 space-y-3">
-                      <div className="rounded-xl bg-white/[0.04] border border-white/10 p-3.5 space-y-1">
+                      <div className="rounded-xl bg-[var(--hover-overlay)] border border-[var(--card-border)] p-3.5 space-y-1">
                         <div className="text-[10px] text-[var(--text-muted)]">Efficiency Rate</div>
-                        <div className="text-xl font-bold text-white">99.8%</div>
+                        <div className="text-xl font-bold text-[var(--text-primary)]">99.8%</div>
                         <div className="text-[9px] text-[var(--success)]">+4.2% vs last month</div>
                       </div>
-                      <div className="rounded-xl bg-white/[0.04] border border-white/10 p-3.5 space-y-1">
+                      <div className="rounded-xl bg-[var(--hover-overlay)] border border-[var(--card-border)] p-3.5 space-y-1">
                         <div className="text-[10px] text-[var(--text-muted)]">Active Users</div>
-                        <div className="text-xl font-bold text-white">1,420</div>
+                        <div className="text-xl font-bold text-[var(--text-primary)]">1,420</div>
                         <div className="text-[9px] text-[var(--accent)]">Live websocket sync</div>
                       </div>
                     </div>

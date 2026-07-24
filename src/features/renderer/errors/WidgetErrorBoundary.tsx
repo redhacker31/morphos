@@ -36,15 +36,15 @@ export class WidgetErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="w-full h-full min-h-[140px] rounded-2xl bg-red-500/10 border border-red-500/30 p-4 backdrop-blur-xl text-red-200 text-xs flex flex-col justify-between items-center text-center space-y-2">
-          <AlertCircle size={20} className="text-red-400" />
-          <div className="font-bold text-white">Widget Preview Unavailable</div>
-          <div className="text-[10px] text-red-300/80 truncate max-w-full font-mono">
+        <div className="w-full h-full min-h-[140px] rounded-2xl bg-red-500/10 border border-red-500/30 p-4 backdrop-blur-xl text-red-700 text-xs flex flex-col justify-between items-center text-center space-y-2">
+          <AlertCircle size={20} className="text-red-500" />
+          <div className="font-bold text-[var(--text-primary)]">Widget Preview Unavailable</div>
+          <div className="text-[10px] text-red-600/80 truncate max-w-full font-mono">
             {this.state.error?.message || "Render exception"}
           </div>
           <button
             onClick={this.handleReset}
-            className="flex items-center gap-1 px-3 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-white text-[10px] font-bold cursor-pointer transition-colors"
+            className="flex items-center gap-1 px-3 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-[var(--text-primary)] text-[10px] font-bold cursor-pointer transition-colors"
           >
             <RotateCcw size={11} /> Reset Widget
           </button>

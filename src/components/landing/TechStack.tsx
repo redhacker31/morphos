@@ -50,14 +50,14 @@ const STACK_ITEMS = [
 
 export function TechStack() {
   return (
-    <section className="py-24 relative overflow-hidden bg-black/40 border-y border-white/5">
+    <section className="py-24 relative overflow-hidden bg-[var(--background-secondary)] border-y border-[var(--card-border)]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-elevated)] border border-white/10 text-xs font-semibold text-[var(--secondary)]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-elevated)] border border-[var(--card-border)] text-xs font-semibold text-[var(--secondary)]">
             <Zap size={14} />
             <span>Frozen Enterprise Technology Foundation</span>
           </div>
-          <h2 className="text-3xl font-extrabold text-white md:text-5xl tracking-tight">
+          <h2 className="text-3xl font-extrabold text-[var(--text-primary)] md:text-5xl tracking-tight">
             Built on Enterprise Standards
           </h2>
           <p className="text-base text-[var(--text-secondary)]">
@@ -76,19 +76,19 @@ export function TechStack() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="rounded-2xl bg-[var(--surface)] border border-white/10 p-6 space-y-4 shadow-xl hover:border-white/20 transition-all group"
+                className="rounded-2xl bg-[var(--surface)] border border-[var(--card-border)] p-6 space-y-4 shadow-xl hover:border-[var(--card-border-hover)] transition-all group"
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-[var(--hover-overlay)] border border-[var(--card-border)] flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">
                     <Icon size={22} />
                   </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-muted)] bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-muted)] bg-[var(--hover-overlay)] px-2.5 py-1 rounded-md border border-[var(--card-border)]">
                     {item.category}
                   </span>
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-white group-hover:text-[var(--primary)] transition-colors">
+                  <h3 className="text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">
                     {item.name}
                   </h3>
                   <div className="text-xs font-medium text-[var(--secondary)]">

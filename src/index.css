@@ -3,56 +3,53 @@
 @tailwind utilities;
 
 /* ============================================
-   MorphOS Design System
-   Describe. Generate. Evolve.
+   MorphOS Design System — Light & Bright
+   Palette + animation references: light-pillar (#5227FF → #FF9FFC)
+   and shader-background (#6633CC plasma).
    ============================================ */
 
 :root {
-  /* ============================================
-     COLOR SYSTEM
-     ============================================ */
-  --primary: #8b5cf6;
-  --primary-hover: #a78bfa;
-  --primary-subtle: rgba(139, 92, 246, 0.12);
-  --primary-glow: #8b5cf6;
-  --primary-light: #c4b5fd;
+  /* COLOR SYSTEM */
+  --primary: #5227ff;
+  --primary-hover: #6b3dff;
+  --primary-subtle: rgba(82, 39, 255, 0.10);
+  --primary-glow: #5227ff;
+  --primary-light: #b9a7ff;
 
-  --secondary: #06b6d4;
-  --accent: #a855f7;
-  --accent-subtle: rgba(168, 85, 247, 0.12);
+  --secondary: #ff9ffc;
+  --accent: #7c3aed;
+  --accent-subtle: rgba(124, 58, 237, 0.10);
 
-  --success: #22c55e;
-  --success-glow: #22c55e;
+  --success: #10b981;
+  --success-glow: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
   --destructive: #ef4444;
 
-  --background: #09090b;
-  --background-secondary: #0f0f12;
-  --surface: #111118;
-  --surface-elevated: #18181f;
+  --background: #f5f3ff;
+  --background-secondary: #ede9fe;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
 
-  --card: rgba(255, 255, 255, 0.05);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-border-hover: rgba(255, 255, 255, 0.16);
+  --card: rgba(255, 255, 255, 0.65);
+  --card-border: rgba(82, 39, 255, 0.10);
+  --card-border-hover: rgba(82, 39, 255, 0.20);
 
-  --border: rgba(255, 255, 255, 0.08);
+  --border: rgba(26, 26, 46, 0.08);
 
-  --glass: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(82, 39, 255, 0.12);
 
   /* Text */
-  --text-primary: #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
+  --text-primary: #1a1a2e;
+  --text-secondary: #5b5b7a;
+  --text-muted: #8e8eaa;
 
   /* State overlays (Hover/Focus) */
-  --hover-overlay: rgba(255, 255, 255, 0.04);
-  --active-overlay: rgba(255, 255, 255, 0.08);
+  --hover-overlay: rgba(82, 39, 255, 0.04);
+  --active-overlay: rgba(82, 39, 255, 0.08);
 
-  /* ============================================
-     RADIUS SYSTEM
-     ============================================ */
+  /* RADIUS SYSTEM */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -60,22 +57,16 @@
   --radius-2xl: 16px;
   --radius-3xl: 24px;
   --radius-full: 9999px;
-
-  /* Standard radix/shadcn mapped radius */
   --radius: var(--radius-lg);
 
-  /* ============================================
-     SHADOW SYSTEM (RGB values for Tailwind)
-     ============================================ */
-  --shadow-color: 0, 0, 0;
-  --glow-purple: 139, 92, 246;
+  /* SHADOW SYSTEM (RGB values for Tailwind) */
+  --shadow-color: 26, 26, 46;
+  --glow-purple: 82, 39, 255;
   --glow-cyan: 6, 182, 212;
-  --glow-success: 34, 197, 94;
+  --glow-success: 16, 185, 129;
   --glow-error: 239, 68, 68;
 
-  /* ============================================
-     Z-INDEX SCALE
-     ============================================ */
+  /* Z-INDEX SCALE */
   --z-base: 0;
   --z-dropdown: 1000;
   --z-sticky: 1020;
@@ -86,33 +77,25 @@
   --z-tooltip: 1070;
   --z-toast: 1080;
 
-  /* ============================================
-     FONTS
-     ============================================ */
+  /* FONTS */
   --font-inter: "Inter", system-ui, -apple-system, sans-serif;
   --font-space-grotesk: "Space Grotesk", "Inter", sans-serif;
 
-  /* ============================================
-     DATA-VIZ SERIES PALETTE
-     ============================================ */
-  --viz-1: #8b5cf6; /* violet */
-  --viz-2: #06b6d4; /* cyan */
-  --viz-3: #22c55e; /* emerald */
-  --viz-4: #f59e0b; /* amber */
-  --viz-5: #ec4899; /* pink */
-  --viz-6: #6366f1; /* indigo */
+  /* DATA-VIZ SERIES PALETTE */
+  --viz-1: #5227ff;
+  --viz-2: #ff9ffc;
+  --viz-3: #10b981;
+  --viz-4: #f59e0b;
+  --viz-5: #06b6d4;
+  --viz-6: #7c3aed;
 
-  /* ============================================
-     ELEVATION SCALE
-     ============================================ */
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --elevation-2: 0 4px 16px rgba(0, 0, 0, 0.35);
-  --elevation-3: 0 10px 30px -6px rgba(0, 0, 0, 0.5);
-  --elevation-4: 0 20px 50px -12px rgba(0, 0, 0, 0.65);
+  /* ELEVATION SCALE */
+  --elevation-1: 0 1px 2px rgba(26, 26, 46, 0.06);
+  --elevation-2: 0 4px 16px rgba(82, 39, 255, 0.08);
+  --elevation-3: 0 10px 30px -6px rgba(82, 39, 255, 0.12);
+  --elevation-4: 0 20px 50px -12px rgba(82, 39, 255, 0.18);
 
-  /* ============================================
-     MOTION TOKENS
-     ============================================ */
+  /* MOTION TOKENS */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 150ms;
@@ -120,9 +103,7 @@
   --dur-slow: 600ms;
 }
 
-/* ============================================
-   TYPOGRAPHY BASE STYLES
-   ============================================ */
+/* TYPOGRAPHY BASE STYLES */
 * {
   margin: 0;
   padding: 0;
@@ -142,29 +123,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings Base Font */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-space-grotesk);
   letter-spacing: -0.02em;
 }
 
-/* ============================================
-   FOCUS & ACCESSIBILITY
-   ============================================ */
+/* FOCUS & ACCESSIBILITY */
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
-/* ============================================
-   SCROLLBAR
-   ============================================ */
+/* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -173,70 +144,41 @@ h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(82, 39, 255, 0.18);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(82, 39, 255, 0.32);
 }
 
-/* ============================================
-   ANIMATIONS & KEYFRAMES
-   ============================================ */
+/* ANIMATIONS & KEYFRAMES */
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.55;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
 }
 
-/* ============================================
-   COMPONENT UTILITIES
-   ============================================ */
+/* COMPONENT UTILITIES */
 @layer components {
   .glass {
     background: var(--glass);
@@ -246,7 +188,7 @@ h6 {
   }
 
   .glass-strong {
-    background: rgba(18, 18, 26, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--glass-border);
@@ -256,12 +198,12 @@ h6 {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: #ffffff;
     font-weight: 700;
     border-radius: var(--radius-xl);
     padding: 0.75rem 1.5rem;
-    box-shadow: 0 8px 24px -8px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 8px 24px -8px rgba(82, 39, 255, 0.5);
     transition: all 0.2s ease;
   }
 
@@ -271,29 +213,27 @@ h6 {
   }
 }
 
-/* ============================================
-   PLAIN UTILITIES
-   ============================================ */
+/* PLAIN UTILITIES */
 .bg-grid {
   background-image: linear-gradient(
       to right,
-      rgba(255, 255, 255, 0.04) 1px,
+      rgba(82, 39, 255, 0.05) 1px,
       transparent 1px
     ),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(to bottom, rgba(82, 39, 255, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
 .bg-gradient-radial {
   background: radial-gradient(
     circle at 50% 0%,
-    rgba(139, 92, 246, 0.12),
+    rgba(82, 39, 255, 0.14),
     transparent 60%
   );
 }
 
 .gradient-text-primary {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -313,9 +253,9 @@ h6 {
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.04) 25%,
-    rgba(255, 255, 255, 0.08) 37%,
-    rgba(255, 255, 255, 0.04) 63%
+    rgba(82, 39, 255, 0.05) 25%,
+    rgba(82, 39, 255, 0.10) 37%,
+    rgba(82, 39, 255, 0.05) 63%
   );
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;

@@ -142,26 +142,26 @@ export function QuickStart({ onSelectTemplate, onBrowseAll }: QuickStartProps) {
               whileHover={{ scale: 1.02, y: -3 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelectTemplate(template.id)}
-              className="glass p-4 rounded-2xl border border-white/[0.05] hover:border-white/20 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group relative overflow-hidden shadow-lg"
+              className="glass p-4 rounded-2xl border border-[var(--card-border)] hover:border-[var(--card-border-hover)] transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group relative overflow-hidden shadow-lg"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
               <div className="flex items-start justify-between">
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center border border-white/10"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--card-border)]"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${template.color} 15%, transparent)`,
                   }}
                 >
                   <Icon size={18} style={{ color: template.color }} />
                 </div>
-                <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--text-muted)] bg-white/5 px-2 py-0.5 rounded-full border border-white/5">
+                <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--text-muted)] bg-[var(--hover-overlay)] px-2 py-0.5 rounded-full border border-[var(--card-border)]">
                   {template.widgetsCount} Widgets
                 </span>
               </div>
 
               <div className="space-y-1">
-                <h4 className="text-xs font-extrabold text-white group-hover:text-[var(--primary)] transition-colors">
+                <h4 className="text-xs font-extrabold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">
                   {template.title}
                 </h4>
                 <p className="text-[11px] text-[var(--text-muted)] line-clamp-2 leading-relaxed">
@@ -169,7 +169,7 @@ export function QuickStart({ onSelectTemplate, onBrowseAll }: QuickStartProps) {
                 </p>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/[0.05] text-[10px] text-[var(--text-secondary)] font-semibold group-hover:text-white transition-colors">
+              <div className="flex items-center justify-between pt-2 border-t border-[var(--card-border)] text-[10px] text-[var(--text-secondary)] font-semibold group-hover:text-[var(--text-primary)] transition-colors">
                 <span>Use Template</span>
                 <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
               </div>

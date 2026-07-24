@@ -153,10 +153,10 @@ export function CommandPalette({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-2xl rounded-2xl bg-[var(--surface-elevated)] border border-white/15 shadow-[0_16px_40px_rgba(0,0,0,0.6)] overflow-hidden z-10 select-none"
+          className="relative w-full max-w-2xl rounded-2xl bg-[var(--surface-elevated)] border border-[var(--card-border)] shadow-[0_16px_40px_rgba(0,0,0,0.6)] overflow-hidden z-10 select-none"
         >
           {/* Search Header */}
-          <div className="flex items-center px-4 py-3.5 border-b border-white/10 gap-3">
+          <div className="flex items-center px-4 py-3.5 border-b border-[var(--card-border)] gap-3">
             <Search size={18} className="text-[var(--text-muted)] shrink-0" />
             <input
               type="text"
@@ -164,11 +164,11 @@ export function CommandPalette({
               value={query}
               onChange={handleQueryChange}
               placeholder="Type a command or search templates, views, settings..."
-              className="flex-1 bg-transparent text-sm text-white placeholder-[var(--text-muted)] focus:outline-none"
+              className="flex-1 bg-transparent text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none"
             />
             <button
               onClick={onClose}
-              className="text-[var(--text-muted)] hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 rounded-lg hover:bg-[var(--hover-overlay)] transition-colors cursor-pointer"
             >
               <X size={16} />
             </button>
@@ -207,7 +207,7 @@ export function CommandPalette({
                           className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs cursor-pointer transition-all ${
                             isSelected
                               ? "bg-[var(--primary)] text-white shadow-md"
-                              : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-white"
+                              : "text-[var(--text-secondary)] hover:bg-[var(--hover-overlay)] hover:text-[var(--text-primary)]"
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -221,7 +221,7 @@ export function CommandPalette({
                                 className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
                                   isSelected
                                     ? "bg-white/20 text-white"
-                                    : "bg-white/5 text-[var(--text-muted)] border border-white/10"
+                                    : "bg-[var(--hover-overlay)] text-[var(--text-muted)] border border-[var(--card-border)]"
                                 }`}
                               >
                                 {item.shortcut}
@@ -242,16 +242,16 @@ export function CommandPalette({
           </div>
 
           {/* Footer Shortcuts Help */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-black/40 border-t border-white/10 text-[10px] text-[var(--text-muted)] select-none">
+          <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--hover-overlay)] border-t border-[var(--card-border)] text-[10px] text-[var(--text-muted)] select-none">
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1">
-                <kbd className="px-1 py-0.5 rounded bg-white/10 font-mono text-[9px]">↑↓</kbd> Navigate
+                <kbd className="px-1 py-0.5 rounded bg-[var(--active-overlay)] font-mono text-[9px]">↑↓</kbd> Navigate
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-1 py-0.5 rounded bg-white/10 font-mono text-[9px]">↵</kbd> Select
+                <kbd className="px-1 py-0.5 rounded bg-[var(--active-overlay)] font-mono text-[9px]">↵</kbd> Select
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-1 py-0.5 rounded bg-white/10 font-mono text-[9px]">ESC</kbd> Close
+                <kbd className="px-1 py-0.5 rounded bg-[var(--active-overlay)] font-mono text-[9px]">ESC</kbd> Close
               </span>
             </div>
             <div className="flex items-center gap-1 text-[var(--primary)] font-semibold">

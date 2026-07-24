@@ -50,7 +50,7 @@ export const InputWidget = memo(function InputWidget({
             payload: { value: e.target.value },
           });
         }}
-        className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)]"
+        className="w-full bg-[var(--hover-overlay)] border border-[var(--card-border)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)]"
       />
     </div>
   );

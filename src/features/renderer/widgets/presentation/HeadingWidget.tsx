@@ -39,11 +39,11 @@ export const HeadingWidget = memo(function HeadingWidget({
   return (
     <div className="w-full py-2 space-y-1">
       {level === "h1" ? (
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">{text}</h1>
+        <h1 className="text-3xl font-extrabold text-[var(--text-primary)] tracking-tight">{text}</h1>
       ) : level === "h3" ? (
-        <h3 className="text-lg font-bold text-white tracking-tight">{text}</h3>
+        <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">{text}</h3>
       ) : (
-        <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
           <Type size={18} className="text-[var(--primary)]" />
           <span>{text}</span>
         </h2>

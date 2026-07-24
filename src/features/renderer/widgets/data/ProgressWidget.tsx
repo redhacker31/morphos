@@ -30,12 +30,12 @@ export const ProgressWidget = memo(function ProgressWidget({
   const fillGradient = `linear-gradient(90deg, ${color}, ${color}cc)`;
 
   return (
-    <div className="w-full h-full space-y-3 p-5 rounded-2xl bg-[var(--surface-elevated)]/90 border border-white/10 backdrop-blur-xl shadow-elev-2 group transition-all duration-300 hover:shadow-elev-3">
+    <div className="w-full h-full space-y-3 p-5 rounded-2xl bg-[var(--surface-elevated)]/90 border border-[var(--card-border)] backdrop-blur-xl shadow-elev-2 group transition-all duration-300 hover:shadow-elev-3">
       <div className="flex justify-between items-center">
         <span className="text-xs font-bold text-[var(--text-primary)]">{title}</span>
         <span className="font-mono text-sm text-[var(--primary)] metric-nums">{percent}%</span>
       </div>
-      <div className="relative w-full h-2.5 rounded-full bg-white/5 overflow-hidden">
+      <div className="relative w-full h-2.5 rounded-full bg-[var(--hover-overlay)] overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-700 ease-elegant relative"
           style={{ width: `${percent}%`, background: fillGradient }}

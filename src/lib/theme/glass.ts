@@ -6,5 +6,5 @@ export const glassStyles = {
   modal: "bg-surface/90 backdrop-blur-2xl border border-glass-border shadow-glow-purple z-modal",
   popover: "bg-surface-elevated/80 backdrop-blur-xl border border-border shadow-medium z-popover rounded-xl",
   // Optional inner highlight effect common in premium glassmorphism
-  innerHighlight: "after:absolute after:inset-0 after:border after:border-white/5 after:rounded-[inherit] after:pointer-events-none",
+  innerHighlight: "after:absolute after:inset-0 after:border after:border-[var(--card-border)] after:rounded-[inherit] after:pointer-events-none",
 };
