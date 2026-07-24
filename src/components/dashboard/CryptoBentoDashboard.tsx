@@ -30,42 +30,80 @@ const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const VIOLET = "#8b5cf6";
 const EMERALD = "#22c55e";
 
-// ============ Mock data (Unsplash avatars) ============
-const salesData = {
-  title: "Sales Statistics",
-  subtitle: "Updated 1 day ago",
-  period: "Monthly",
-  visitors: 2025,
-  chartData: [
-    { month: "September", value1: 35, value2: 50 },
-    { month: "November", value1: 30, value2: 70 },
-  ],
-};
+// ============ Types ============
+export interface SalesStatisticsData {
+  title: string;
+  subtitle: string;
+  period: string;
+  visitors: number;
+  chartData: { month: string; value1: number; value2: number }[];
+}
+export interface TransactionData {
+  title: string;
+  subtitle: string;
+  amount: string;
+  avatars: string[];
+}
+export interface BalanceData {
+  title: string;
+  balance: string;
+  percentage: number;
+  avgScore: string;
+}
+export interface TimelineItem {
+  year: string;
+  description: string;
+  isActive?: boolean;
+}
+export interface MarketForecastData {
+  title: string;
+  timeline: TimelineItem[];
+  btcPrice: string;
+  btcGrowth: string;
+  marketCap: string;
+}
+export interface CryptoPortfolio {
+  sales: SalesStatisticsData;
+  transactions: TransactionData;
+  balance: BalanceData;
+  forecast: MarketForecastData;
+}
 
-const txData = {
-  title: "Recent Transactions",
-  subtitle: "Sell currency",
-  amount: "12.53 ETH / BTC",
-  avatars: [
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-    "https://images.unsplash.com/photo-1500648767791-4dcc5cd30a9f?w=100&h=100&fit=crop&crop=face",
-  ],
-};
-
-const balanceData = { title: "Current balance", balance: "15,368$", percentage: 14, avgScore: "18,324$" };
-
-const forecastData = {
-  title: "Market forecast",
-  timeline: [
-    { year: "2023", description: "Explosive growth of DeFi" },
-    { year: "2024", description: "Mainstream adoption of CBDCs" },
-    { year: "2025", description: "1 BTC reaches $500K" },
-    { year: "2027", description: "Widespread retail use", isActive: true },
-  ],
-  btcPrice: "21,105$",
-  btcGrowth: "+28.21%",
-  marketCap: "1.3trln$",
+// ============ Default (seed) payload — persisted to Enter Cloud on first load ============
+export const DEFAULT_PORTFOLIO: CryptoPortfolio = {
+  sales: {
+    title: "Sales Statistics",
+    subtitle: "Updated 1 day ago",
+    period: "Monthly",
+    visitors: 2025,
+    chartData: [
+      { month: "September", value1: 35, value2: 50 },
+      { month: "November", value1: 30, value2: 70 },
+    ],
+  },
+  transactions: {
+    title: "Recent Transactions",
+    subtitle: "Sell currency",
+    amount: "12.53 ETH / BTC",
+    avatars: [
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+      "https://images.unsplash.com/photo-1500648767791-4dcc5cd30a9f?w=100&h=100&fit=crop&crop=face",
+    ],
+  },
+  balance: { title: "Current balance", balance: "15,368$", percentage: 14, avgScore: "18,324$" },
+  forecast: {
+    title: "Market forecast",
+    timeline: [
+      { year: "2023", description: "Explosive growth of DeFi" },
+      { year: "2024", description: "Mainstream adoption of CBDCs" },
+      { year: "2025", description: "1 BTC reaches $500K" },
+      { year: "2027", description: "Widespread retail use", isActive: true },
+    ],
+    btcPrice: "21,105$",
+    btcGrowth: "+28.21%",
+    marketCap: "1.3trln$",
+  },
 };
 
 const marketCapSeries = [56, 48, 38, 28, 20, 16, 14, 13, 12, 11, 10, 9].map((v, i) => ({ i, v }));
@@ -74,7 +112,7 @@ const marketCapSeries = [56, 48, 38, 28, 20, 16, 14, 13, 12, 11, 10, 9].map((v, 
 const cardBase =
   "rounded-3xl bg-[var(--surface-elevated)]/80 border border-white/10 backdrop-blur-xl shadow-elev-2 hover:shadow-elev-3 hover:border-white/20 transition-all duration-300";
 
-function SalesStatisticsCard() {
+function SalesStatisticsCard({ data }: { data: SalesStatisticsData }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -84,11 +122,11 @@ function SalesStatisticsCard() {
     >
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h3 className="text-white text-lg font-bold">{salesData.title}</h3>
-          <p className="text-[var(--text-muted)] text-sm">{salesData.subtitle}</p>
+          <h3 className="text-white text-lg font-bold">{data.title}</h3>
+          <p className="text-[var(--text-muted)] text-sm">{data.subtitle}</p>
         </div>
         <button className="border border-white/15 text-[var(--text-secondary)] px-3 py-1.5 rounded-full text-[10px] flex items-center gap-1.5 hover:border-white/30 hover:text-white hover:bg-white/5 transition-all">
-          {salesData.period}
+          {data.period}
           <ChevronDown size={12} />
         </button>
       </div>
@@ -101,20 +139,14 @@ function SalesStatisticsCard() {
               <ArrowUp size={11} className="text-[var(--surface)]" />
             </span>
           </div>
-          <p className="text-white text-4xl font-extrabold metric-nums">{salesData.visitors.toLocaleString()}</p>
+          <p className="text-white text-4xl font-extrabold metric-nums">{data.visitors.toLocaleString()}</p>
         </div>
 
         <div className="w-full sm:w-[230px] h-[150px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={salesData.chartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+            <BarChart data={data.chartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
               <CartesianGrid vertical={false} stroke={CHART_GRID} />
-              <XAxis
-                dataKey="month"
-                tick={{ fill: CHART_TICK, fontSize: 9 }}
-                axisLine={false}
-                tickLine={false}
-                interval={0}
-              />
+              <XAxis dataKey="month" tick={{ fill: CHART_TICK, fontSize: 9 }} axisLine={false} tickLine={false} interval={0} />
               <YAxis hide />
               <Tooltip cursor={{ fill: CHART_CURSOR }} content={<ChartTooltip />} />
               <Bar dataKey="value1" stackId="a" fill={VIOLET} maxBarSize={70} isAnimationActive animationDuration={800} animationEasing="ease-out" />
@@ -127,7 +159,7 @@ function SalesStatisticsCard() {
   );
 }
 
-function RecentTransactionsCard() {
+function RecentTransactionsCard({ data }: { data: TransactionData }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -141,12 +173,12 @@ function RecentTransactionsCard() {
             <ArrowLeftRight size={20} className="text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold text-lg">{txData.title}</h3>
-            <p className="text-[var(--text-muted)] text-sm">{txData.subtitle}</p>
+            <h3 className="text-white font-bold text-lg">{data.title}</h3>
+            <p className="text-[var(--text-muted)] text-sm">{data.subtitle}</p>
           </div>
         </div>
         <div className="flex -space-x-3">
-          {txData.avatars.map((avatar, i) => (
+          {data.avatars.map((avatar, i) => (
             <img
               key={i}
               src={avatar}
@@ -160,7 +192,7 @@ function RecentTransactionsCard() {
       <div className="bg-white/5 border border-white/10 rounded-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors cursor-pointer">
         <div className="flex items-center gap-3">
           <Wallet size={22} className="text-[var(--text-secondary)]" />
-          <span className="text-[var(--text-secondary)] text-sm metric-nums">{txData.amount}</span>
+          <span className="text-[var(--text-secondary)] text-sm metric-nums">{data.amount}</span>
         </div>
         <button className="text-[var(--text-muted)] hover:text-white transition-colors">
           <MoreHorizontal size={18} />
@@ -170,7 +202,7 @@ function RecentTransactionsCard() {
   );
 }
 
-function CurrentBalanceCard() {
+function CurrentBalanceCard({ data }: { data: BalanceData }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -179,7 +211,7 @@ function CurrentBalanceCard() {
       className={`${cardBase} p-5 md:p-6 flex-1 flex flex-col`}
     >
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-white font-bold text-lg">{balanceData.title}</h3>
+        <h3 className="text-white font-bold text-lg">{data.title}</h3>
         <div className="flex gap-2">
           <button className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:scale-110 transition-all">
             <ChevronLeft size={14} className="text-[var(--text-secondary)]" />
@@ -198,12 +230,12 @@ function CurrentBalanceCard() {
         <div className="flex items-end justify-between gap-2 flex-1">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-white font-bold text-xl metric-nums">{balanceData.percentage}%</span>
+              <span className="text-white font-bold text-xl metric-nums">{data.percentage}%</span>
               <div className="w-6 h-6 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
                 <ArrowUpRight size={12} className="text-[var(--viz-3)]" />
               </div>
             </div>
-            <p className="text-white/60 text-xs mt-1">Avg score: {balanceData.avgScore}</p>
+            <p className="text-white/60 text-xs mt-1">Avg score: {data.avgScore}</p>
           </div>
 
           <div className="relative">
@@ -218,7 +250,7 @@ function CurrentBalanceCard() {
               <circle cx="80" cy="25" r="6" fill={VIOLET} className="animate-pulse-slow" />
             </svg>
             <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
-              <p className="text-white text-2xl font-bold metric-nums">{balanceData.balance}</p>
+              <p className="text-white text-2xl font-bold metric-nums">{data.balance}</p>
             </div>
           </div>
         </div>
@@ -227,7 +259,7 @@ function CurrentBalanceCard() {
   );
 }
 
-function MarketForecastCard() {
+function MarketForecastCard({ data }: { data: MarketForecastData }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -236,7 +268,6 @@ function MarketForecastCard() {
       className={`${cardBase} p-5 md:p-6 flex-1`}
     >
       <div className="flex gap-4 h-full">
-        {/* Left column: header + timeline */}
         <div className="flex-1 min-w-0">
           <div className="relative">
             <div className="absolute left-[23px] top-[24px] w-[2px] bg-white/10" style={{ height: 320 }} />
@@ -252,7 +283,7 @@ function MarketForecastCard() {
               </h3>
             </div>
 
-            {forecastData.timeline.map((item, index) => (
+            {data.timeline.map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -12 }}
@@ -278,16 +309,14 @@ function MarketForecastCard() {
           </div>
         </div>
 
-        {/* Right column: BTC + Market cap */}
         <div className="w-44 sm:w-52 flex flex-col gap-3 my-auto">
-          {/* BTC price card */}
           <div className="rounded-[24px] p-4 aspect-square border border-[var(--viz-3)]/30 bg-gradient-to-br from-[var(--viz-3)]/15 to-transparent hover:scale-[1.02] transition-transform cursor-pointer flex flex-col">
             <div className="flex justify-between items-start mb-1">
               <span className="text-white/60 text-[10px]">BTC price</span>
               <ArrowUpRight size={14} className="text-white" />
             </div>
-            <p className="text-white text-2xl font-bold metric-nums">{forecastData.btcPrice}</p>
-            <span className="text-[var(--viz-3)] text-xs">{forecastData.btcGrowth}</span>
+            <p className="text-white text-2xl font-bold metric-nums">{data.btcPrice}</p>
+            <span className="text-[var(--viz-3)] text-xs">{data.btcGrowth}</span>
 
             <div className="mt-auto relative pt-6">
               <div className="absolute left-[60%] -top-1 -translate-x-1/2 z-10">
@@ -308,13 +337,12 @@ function MarketForecastCard() {
             </div>
           </div>
 
-          {/* Market cap forecast card */}
           <div className="rounded-[24px] p-4 aspect-square border border-[var(--viz-1)]/30 bg-gradient-to-br from-[var(--viz-1)]/20 to-transparent hover:scale-[1.02] transition-transform cursor-pointer flex flex-col">
             <div className="flex justify-between items-start mb-1">
               <span className="text-white/60 text-[10px]">Market cap forecast</span>
               <ArrowUpRight size={14} className="text-white" />
             </div>
-            <p className="text-white text-2xl font-bold mb-2 metric-nums">{forecastData.marketCap}</p>
+            <p className="text-white text-2xl font-bold mb-2 metric-nums">{data.marketCap}</p>
             <div className="h-20">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={marketCapSeries} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
@@ -348,17 +376,24 @@ function MarketForecastCard() {
   );
 }
 
-export function CryptoBentoDashboard({ className = "" }: { className?: string }) {
+export function CryptoBentoDashboard({
+  portfolio,
+  className = "",
+}: {
+  portfolio?: CryptoPortfolio;
+  className?: string;
+}) {
+  const p = portfolio ?? DEFAULT_PORTFOLIO;
   return (
     <div className={`w-full ${className}`}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-stretch">
         <div className="flex flex-col gap-4 md:gap-6">
-          <SalesStatisticsCard />
-          <CurrentBalanceCard />
+          <SalesStatisticsCard data={p.sales} />
+          <CurrentBalanceCard data={p.balance} />
         </div>
         <div className="flex flex-col gap-4 md:gap-6">
-          <RecentTransactionsCard />
-          <MarketForecastCard />
+          <RecentTransactionsCard data={p.transactions} />
+          <MarketForecastCard data={p.forecast} />
         </div>
       </div>
     </div>

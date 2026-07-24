@@ -10,6 +10,7 @@ import {
   BarChart3,
   Receipt,
   KanbanSquare,
+  Bitcoin,
   X,
   ArrowRight,
   type LucideIcon,
@@ -27,6 +28,7 @@ const iconMap: Record<string, LucideIcon> = {
   BarChart3,
   Receipt,
   KanbanSquare,
+  Bitcoin,
 };
 
 const categories = ["All", "Business", "Finance", "Operations", "Healthcare", "Analytics", "Productivity"];

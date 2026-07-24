@@ -1,0 +1,29 @@
+-- MorphOS crypto portfolio bento: per-user persisted dashboard payload.
+-- RLS enabled at creation; ownership set server-side by the existing set_owner_uid trigger.
+
+CREATE TABLE IF NOT EXISTS public.crypto_portfolio (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  payload jsonb NOT NULL DEFAULT '{}'::jsonb,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.crypto_portfolio ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "users manage own crypto_portfolio"
+  ON public.crypto_portfolio FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS crypto_portfolio_user_unique
+  ON public.crypto_portfolio (user_id);
+
+DROP TRIGGER IF EXISTS crypto_portfolio_set_owner ON public.crypto_portfolio;
+CREATE TRIGGER crypto_portfolio_set_owner
+  BEFORE INSERT ON public.crypto_portfolio
+  FOR EACH ROW EXECUTE FUNCTION public.set_owner_uid();
+
+DROP TRIGGER IF EXISTS crypto_portfolio_set_updated_at ON public.crypto_portfolio;
+CREATE TRIGGER crypto_portfolio_set_updated_at
+  BEFORE UPDATE ON public.crypto_portfolio
+  FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();

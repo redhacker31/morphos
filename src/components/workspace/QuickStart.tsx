@@ -9,6 +9,7 @@ import {
   HeartPulse,
   GraduationCap,
   Briefcase,
+  Bitcoin,
   LayoutDashboard,
   Sparkle,
   ChevronRight,
@@ -96,6 +97,15 @@ export const TEMPLATE_CARDS: TemplateCardItem[] = [
     color: "#6366F1",
     desc: "Cross-department KPI summary, system status, and task timelines.",
     widgetsCount: 6,
+  },
+  {
+    id: "tmpl-crypto",
+    title: "Crypto Portfolio Bento",
+    category: "Finance",
+    icon: Bitcoin,
+    color: "#F7931A",
+    desc: "Live crypto bento: sales stats, transactions, balance gauge, and market forecast.",
+    widgetsCount: 4,
   },
 ];
 

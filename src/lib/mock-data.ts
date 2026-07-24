@@ -123,6 +123,14 @@ export const mockTemplates: Template[] = [
     icon: "KanbanSquare",
     color: "#10B981",
   },
+  {
+    id: "tmpl-crypto",
+    title: "Crypto Portfolio Bento",
+    description: "Live crypto bento: sales stats, transactions, balance gauge, and market forecast.",
+    category: "Finance",
+    icon: "Bitcoin",
+    color: "#F7931A",
+  },
 ];
 
 // ---- Prompt History ----

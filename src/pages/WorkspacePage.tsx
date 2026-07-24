@@ -17,6 +17,8 @@ import { useAIGenerator } from "@/features/ai-generator/hooks/useAIGenerator";
 import { useProjects } from "@/hooks/useProjects";
 import { usePromptHistory } from "@/hooks/usePromptHistory";
 import { useSession } from "@/hooks/useSession";
+import { useCryptoPortfolio } from "@/hooks/useCryptoPortfolio";
+import { CryptoBentoDashboard } from "@/components/dashboard/CryptoBentoDashboard";
 import { supabase } from "@/integrations/supabase/client";
 import { mockTemplates } from "@/lib/mock-data";
 import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
@@ -123,6 +125,7 @@ export default function WorkspacePage() {
   const ai = useAIGenerator();
   const projectsHook = useProjects(ready);
   const historyHook = usePromptHistory(ready);
+  const cryptoHook = useCryptoPortfolio(ready && activeView === "crypto");
 
   const [activeView, setActiveView] = useState("workspace");
   const [showUpload, setShowUpload] = useState(false);
@@ -174,6 +177,10 @@ export default function WorkspacePage() {
 
   const handleSelectTemplate = (templateId: string) => {
     setShowTemplatesModal(false);
+    if (templateId === "tmpl-crypto") {
+      setActiveView("crypto");
+      return;
+    }
     setActiveView("workspace");
     const promptText = promptForTemplate(templateId);
     setPrompt(promptText);
@@ -350,6 +357,37 @@ export default function WorkspacePage() {
           {activeView === "settings" && (
             <div className="py-4">
               <SettingsPanel />
+            </div>
+          )}
+
+          {activeView === "crypto" && (
+            <div className="py-4 space-y-6">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <h2 className="text-base font-bold text-white">Crypto Portfolio Bento</h2>
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    Live data persisted to your Enter Cloud portfolio.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setActiveView("workspace")}
+                  className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-xs font-semibold text-[var(--text-secondary)] hover:text-white hover:border-white/20 transition-all"
+                >
+                  Back to Workspace
+                </button>
+              </div>
+              {cryptoHook.loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="h-56 rounded-3xl border border-white/10 bg-white/[0.03] skeleton"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <CryptoBentoDashboard portfolio={cryptoHook.portfolio ?? undefined} />
+              )}
             </div>
           )}
 
