@@ -36,14 +36,14 @@ export class RendererErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="w-full rounded-3xl bg-red-500/10 border border-red-500/40 p-8 text-center space-y-4 backdrop-blur-2xl">
-          <div className="w-12 h-12 rounded-xl bg-red-500/20 mx-auto flex items-center justify-center text-red-500">
+          <div className="w-12 h-12 rounded-xl bg-red-500/20 mx-auto flex items-center justify-center text-red-400">
             <ShieldAlert size={24} />
           </div>
           <h3 className="text-lg font-bold text-[var(--text-primary)]">Application Rendering Engine Exception</h3>
-          <p className="text-xs text-red-600/80 max-w-md mx-auto">
+          <p className="text-xs text-red-300/80 max-w-md mx-auto">
             The Dynamic Renderer encountered an unexpected layout or AST processing error.
           </p>
-          <div className="text-[10px] font-mono bg-[var(--hover-overlay)] text-red-500 p-3 rounded-xl border border-red-500/20 max-w-lg mx-auto truncate">
+          <div className="text-[10px] font-mono bg-[var(--hover-overlay)] text-red-400 p-3 rounded-xl border border-red-500/20 max-w-lg mx-auto truncate">
             {this.state.error?.message || "Unknown Renderer Exception"}
           </div>
           <button

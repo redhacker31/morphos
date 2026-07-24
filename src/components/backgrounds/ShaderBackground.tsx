@@ -94,8 +94,8 @@ export const ShaderBackground: React.FC<ShaderBackgroundProps> = ({
         space.x += random(space.y * warpFrequency + iTime * warpSpeed + 2.0) * warpAmplitude * horizontalFade;
 
         vec4 lines = vec4(0.0);
-        vec4 bgColor1 = vec4(0.96, 0.95, 1.0, 1.0); /* light lavender */
-        vec4 bgColor2 = vec4(0.93, 0.91, 1.0, 1.0);
+        vec4 bgColor1 = vec4(0.02, 0.02, 0.04, 1.0); /* near-black */
+        vec4 bgColor2 = vec4(0.04, 0.03, 0.07, 1.0); /* deep indigo-black */
 
         for(int l = 0; l < linesPerGroup; l++) {
           float normalizedLineIndex = float(l) / float(linesPerGroup);

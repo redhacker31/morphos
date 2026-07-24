@@ -12,7 +12,7 @@ export default function CryptoDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] relative overflow-hidden">
-      <ShaderBackground className="pointer-events-none absolute inset-0 opacity-30 mix-blend-multiply" />
+      <ShaderBackground className="pointer-events-none absolute inset-0 opacity-40 mix-blend-screen" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-radial opacity-70" />
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
 

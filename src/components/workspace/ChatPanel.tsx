@@ -287,8 +287,8 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
             ))}
 
             {error && (
-              <div className="flex items-start gap-2 text-[11px] text-red-600 bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
-                <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-500" />
+              <div className="flex items-start gap-2 text-[11px] text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
+                <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-400" />
                 <span>{error}</span>
               </div>
             )}

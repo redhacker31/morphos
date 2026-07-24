@@ -30,9 +30,9 @@ export const BadgeWidget = memo(function BadgeWidget({
 
   const colorStyle =
     variant === "warning"
-      ? "text-amber-600 bg-amber-500/10 border-amber-500/20"
+      ? "text-amber-400 bg-amber-400/10 border-amber-400/20"
       : variant === "error"
-      ? "text-red-600 bg-red-500/10 border-red-500/20"
+      ? "text-red-400 bg-red-400/10 border-red-400/20"
       : "text-[var(--success)] bg-[var(--success)]/10 border-[var(--success)]/20";
 
   return (

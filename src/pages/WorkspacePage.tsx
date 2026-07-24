@@ -269,7 +269,7 @@ export default function WorkspacePage() {
                   </div>
                   <button
                     onClick={() => setGenError(null)}
-                    className="text-red-500 hover:text-[var(--text-primary)] transition-colors shrink-0"
+                    className="text-red-400 hover:text-[var(--text-primary)] transition-colors shrink-0"
                     aria-label="Dismiss error"
                   >
                     <X size={16} />

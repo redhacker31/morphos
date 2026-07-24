@@ -7,8 +7,8 @@ export function BackgroundSystem() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 select-none">
       {/* Animated indigo→pink light pillar (light-pillar reference) */}
-      <div className="absolute inset-0 opacity-50 mix-blend-multiply">
-        <LightPillar intensity={0.6} pillarWidth={3.2} mixBlendMode="normal" />
+      <div className="absolute inset-0 opacity-60 mix-blend-screen">
+        <LightPillar intensity={0.7} pillarWidth={3.2} mixBlendMode="normal" />
       </div>
 
       {/* Drifting Ambient Gradient Orbs */}

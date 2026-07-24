@@ -37,10 +37,10 @@ export const AlertWidget = memo(function AlertWidget({
   const isError = alertType === "error";
 
   const boxStyle = isError
-    ? "bg-red-500/10 border-red-500/30 text-red-700"
+    ? "bg-red-500/10 border-red-500/30 text-red-300"
     : isWarning
-    ? "bg-amber-500/10 border-amber-500/30 text-amber-700"
-    : "bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]";
+    ? "bg-amber-500/10 border-amber-500/30 text-amber-300"
+    : "bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary-light)]";
 
   const Icon = isError ? AlertCircle : isWarning ? AlertCircle : CheckCircle2;
 

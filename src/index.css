@@ -3,22 +3,22 @@
 @tailwind utilities;
 
 /* ============================================
-   MorphOS Design System — Light & Bright
-   Palette + animation references: light-pillar (#5227FF → #FF9FFC)
-   and shader-background (#6633CC plasma).
+   MorphOS Design System — Dark (Black)
+   Bright indigo→pink accents on a black canvas.
+   Animation references: light-pillar + shader-background.
    ============================================ */
 
 :root {
   /* COLOR SYSTEM */
   --primary: #5227ff;
   --primary-hover: #6b3dff;
-  --primary-subtle: rgba(82, 39, 255, 0.10);
+  --primary-subtle: rgba(82, 39, 255, 0.12);
   --primary-glow: #5227ff;
   --primary-light: #b9a7ff;
 
   --secondary: #ff9ffc;
   --accent: #7c3aed;
-  --accent-subtle: rgba(124, 58, 237, 0.10);
+  --accent-subtle: rgba(124, 58, 237, 0.12);
 
   --success: #10b981;
   --success-glow: #10b981;
@@ -26,28 +26,28 @@
   --error: #ef4444;
   --destructive: #ef4444;
 
-  --background: #f5f3ff;
-  --background-secondary: #ede9fe;
-  --surface: #ffffff;
-  --surface-elevated: #ffffff;
+  --background: #000000;
+  --background-secondary: #08080c;
+  --surface: #0c0c12;
+  --surface-elevated: #14141c;
 
-  --card: rgba(255, 255, 255, 0.65);
-  --card-border: rgba(82, 39, 255, 0.10);
-  --card-border-hover: rgba(82, 39, 255, 0.20);
+  --card: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-border-hover: rgba(255, 255, 255, 0.16);
 
-  --border: rgba(26, 26, 46, 0.08);
+  --border: rgba(255, 255, 255, 0.08);
 
-  --glass: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(82, 39, 255, 0.12);
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.10);
 
   /* Text */
-  --text-primary: #1a1a2e;
-  --text-secondary: #5b5b7a;
-  --text-muted: #8e8eaa;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
 
   /* State overlays (Hover/Focus) */
-  --hover-overlay: rgba(82, 39, 255, 0.04);
-  --active-overlay: rgba(82, 39, 255, 0.08);
+  --hover-overlay: rgba(255, 255, 255, 0.04);
+  --active-overlay: rgba(255, 255, 255, 0.08);
 
   /* RADIUS SYSTEM */
   --radius-sm: 4px;
@@ -60,7 +60,7 @@
   --radius: var(--radius-lg);
 
   /* SHADOW SYSTEM (RGB values for Tailwind) */
-  --shadow-color: 26, 26, 46;
+  --shadow-color: 0, 0, 0;
   --glow-purple: 82, 39, 255;
   --glow-cyan: 6, 182, 212;
   --glow-success: 16, 185, 129;
@@ -90,10 +90,10 @@
   --viz-6: #7c3aed;
 
   /* ELEVATION SCALE */
-  --elevation-1: 0 1px 2px rgba(26, 26, 46, 0.06);
-  --elevation-2: 0 4px 16px rgba(82, 39, 255, 0.08);
-  --elevation-3: 0 10px 30px -6px rgba(82, 39, 255, 0.12);
-  --elevation-4: 0 20px 50px -12px rgba(82, 39, 255, 0.18);
+  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --elevation-2: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --elevation-3: 0 10px 30px -6px rgba(0, 0, 0, 0.6);
+  --elevation-4: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
 
   /* MOTION TOKENS */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -144,11 +144,11 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(82, 39, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(82, 39, 255, 0.32);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ANIMATIONS & KEYFRAMES */
@@ -188,7 +188,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .glass-strong {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(12, 12, 18, 0.85);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--glass-border);
@@ -217,10 +217,10 @@ h1, h2, h3, h4, h5, h6 {
 .bg-grid {
   background-image: linear-gradient(
       to right,
-      rgba(82, 39, 255, 0.05) 1px,
+      rgba(255, 255, 255, 0.04) 1px,
       transparent 1px
     ),
-    linear-gradient(to bottom, rgba(82, 39, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -253,9 +253,9 @@ h1, h2, h3, h4, h5, h6 {
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(82, 39, 255, 0.05) 25%,
-    rgba(82, 39, 255, 0.10) 37%,
-    rgba(82, 39, 255, 0.05) 63%
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.08) 37%,
+    rgba(255, 255, 255, 0.04) 63%
   );
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;

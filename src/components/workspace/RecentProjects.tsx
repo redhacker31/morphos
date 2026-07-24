@@ -186,7 +186,7 @@ export function RecentProjects({
                               onDelete(project.id);
                               setActiveMenuId(null);
                             }}
-                            className="w-full text-left px-3 py-1.5 rounded-lg text-[11px] text-red-500 hover:bg-red-500/10 flex items-center gap-2 cursor-pointer"
+                            className="w-full text-left px-3 py-1.5 rounded-lg text-[11px] text-red-400 hover:bg-red-500/10 flex items-center gap-2 cursor-pointer"
                           >
                             <Trash2 size={12} /> Delete
                           </button>

@@ -207,7 +207,7 @@ function HistoryItem({
             e.stopPropagation();
             onDelete(item.id);
           }}
-          className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:text-red-500 transition-colors cursor-pointer"
+          className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-muted)] hover:text-red-400 transition-colors cursor-pointer"
           aria-label="Delete"
         >
           <Trash2 size={13} />

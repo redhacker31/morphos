@@ -25,14 +25,14 @@ export function DynamicRenderer({ astPayload, onWidgetEvent }: DynamicRendererPr
   if (!pipelineResult.success || !pipelineResult.ast) {
     return (
       <div className="w-full rounded-3xl bg-red-500/10 border border-red-500/40 p-8 text-center space-y-4 backdrop-blur-2xl">
-        <div className="w-12 h-12 rounded-xl bg-red-500/20 mx-auto flex items-center justify-center text-red-500">
+        <div className="w-12 h-12 rounded-xl bg-red-500/20 mx-auto flex items-center justify-center text-red-400">
           <AlertTriangle size={24} />
         </div>
         <h3 className="text-lg font-bold text-[var(--text-primary)]">AST Validation Failed</h3>
-        <p className="text-xs text-red-600/80 max-w-md mx-auto">
+        <p className="text-xs text-red-300/80 max-w-md mx-auto">
           The provided JSON payload failed pre-render Zod schema validation at {pipelineResult.stage}.
         </p>
-        <div className="text-left bg-[var(--hover-overlay)] p-4 rounded-xl border border-red-500/20 max-w-lg mx-auto space-y-1 font-mono text-[11px] text-red-500 max-h-40 overflow-y-auto">
+        <div className="text-left bg-[var(--hover-overlay)] p-4 rounded-xl border border-red-500/20 max-w-lg mx-auto space-y-1 font-mono text-[11px] text-red-400 max-h-40 overflow-y-auto">
           {pipelineResult.errors.map((err, idx) => (
             <div key={idx}>• {err}</div>
           ))}
