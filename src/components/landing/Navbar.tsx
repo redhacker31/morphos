@@ -1,7 +1,8 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Bell, User, Cpu } from "lucide-react";
+import { Search, Bell, User } from "lucide-react";
+import { MORPHOS_LOGO_URL } from "@/components/ui/Logo";
 
 export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -10,13 +11,12 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--card-border)] bg-[var(--surface-elevated)]/80 backdrop-blur-xl px-6 py-3">
       <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-4">
         {/* Left: Brand Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#06B6D4] to-[#8B5CF6] flex items-center justify-center text-white shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-            <Cpu size={18} className="animate-pulse" />
-          </div>
-          <span className="text-xl font-black tracking-tight text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">
-            MorphOS
-          </span>
+        <Link to="/" className="flex items-center group shrink-0">
+          <img
+            src={MORPHOS_LOGO_URL}
+            alt="MorphOS"
+            className="h-9 w-auto object-contain group-hover:opacity-90 transition-opacity"
+          />
         </Link>
 
         {/* Dashboard Showcase */}

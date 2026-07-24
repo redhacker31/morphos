@@ -1,7 +1,9 @@
-
 import React from "react";
-import { Hexagon } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+/** Public URL of the official MorphOS logo lockup (M icon + wordmark + tagline). */
+export const MORPHOS_LOGO_URL =
+  "https://cdn.enter.pro/resources/uid_100187967/cbdddb1d-be7b-47.png";
 
 interface LogoProps {
   collapsed?: boolean;
@@ -9,30 +11,41 @@ interface LogoProps {
   size?: "sm" | "md" | "lg";
 }
 
+/**
+ * MorphOS brand logo. Renders the full lockup image; when `collapsed`,
+ * crops to the top "M" icon mark so it fits a square sidebar slot.
+ */
 export function Logo({ collapsed = false, className, size = "md" }: LogoProps) {
-  const sizes = {
-    sm: { icon: 18, text: "text-base" },
-    md: { icon: 22, text: "text-xl" },
-    lg: { icon: 28, text: "text-2xl" },
-  };
+  const heights = {
+    sm: 26,
+    md: 30,
+    lg: 40,
+  } as const;
+  const h = heights[size];
 
-  const { icon, text } = sizes[size];
+  if (collapsed) {
+    return (
+      <div
+        className={cn(
+          "w-8 h-8 rounded-lg overflow-hidden shrink-0 ring-1 ring-white/10",
+          className
+        )}
+      >
+        <img
+          src={MORPHOS_LOGO_URL}
+          alt="MorphOS"
+          className="w-full h-full object-cover object-top"
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className={cn("flex items-center gap-2.5", className)}>
-      <div className="relative">
-        <Hexagon
-          size={icon}
-          className="text-[var(--primary)] fill-[var(--primary-subtle)]"
-          strokeWidth={2}
-        />
-        <div className="absolute inset-0 blur-lg bg-[var(--primary-glow)] rounded-full opacity-40" />
-      </div>
-      {!collapsed && (
-        <span className={cn("font-bold tracking-tight text-[var(--text-primary)]", text)}>
-          MorphOS
-        </span>
-      )}
-    </div>
+    <img
+      src={MORPHOS_LOGO_URL}
+      alt="MorphOS"
+      style={{ height: h }}
+      className={cn("w-auto object-contain", className)}
+    />
   );
 }
