@@ -1,13 +1,9 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Sparkles, Zap, Users, TrendingUp, Cpu, Wand2 } from "lucide-react";
-
 export function Hero() {
   const [promptValue, setPromptValue] = useState("Generate an ERP for School");
-
-  return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden bg-transparent text-[var(--text-primary)]">
+  return <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden bg-transparent text-[var(--text-primary)]">
       {/* Background Vertical Grid Lines */}
       <div className="absolute inset-0 pointer-events-none flex justify-between max-w-[1500px] mx-auto px-6 opacity-20">
         <div className="w-px h-full bg-gradient-to-b from-transparent via-[var(--primary)]/20 to-transparent" />
@@ -65,8 +61,8 @@ export function Hero() {
         </div>
 
         <div className="pt-4 text-[var(--text-secondary)] text-base sm:text-lg md:text-xl font-medium max-w-xl mx-auto leading-relaxed">
-          <p>Instead of learning software, simply describe what you need.</p>
-          <p>MorphOS generates complete applications instantly using AI.</p>
+          <p className="text-[19px]">Instead of learning software, simply describe what you need.</p>
+          <p className="text-[19px]">MorphOS generates complete applications instantly using AI.</p>
         </div>
       </div>
 
@@ -77,23 +73,16 @@ export function Hero() {
             {/* Prompt Input Header */}
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-2xl bg-[var(--primary)]/15 border border-[var(--primary)]/30 flex items-center justify-center text-[var(--primary)] shrink-0">
-                <Sparkles size={20} className="animate-spin" style={{ animationDuration: "8s" }} />
+                <Sparkles size={20} className="animate-spin" style={{
+                animationDuration: "8s"
+              }} />
               </div>
-              <input
-                type="text"
-                value={promptValue}
-                onChange={(e) => setPromptValue(e.target.value)}
-                className="w-full bg-transparent text-xl sm:text-2xl font-bold text-[var(--text-primary)] focus:outline-none placeholder-[var(--text-muted)] tracking-tight"
-                placeholder="Describe your application..."
-              />
+              <input type="text" value={promptValue} onChange={e => setPromptValue(e.target.value)} className="w-full bg-transparent text-xl sm:text-2xl font-bold text-[var(--text-primary)] focus:outline-none placeholder-[var(--text-muted)] tracking-tight" placeholder="Describe your application..." />
             </div>
 
             {/* Bottom Generate Button */}
             <div className="flex justify-end pt-8">
-              <Link
-                to="/workspace/new"
-                className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--accent)] to-[var(--secondary)] hover:opacity-90 text-white font-extrabold text-sm sm:text-base flex items-center gap-2.5 shadow-[0_0_25px_rgba(82,39,255,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
-              >
+              <Link to="/workspace/new" className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--accent)] to-[var(--secondary)] hover:opacity-90 text-white font-extrabold text-sm sm:text-base flex items-center gap-2.5 shadow-[0_0_25px_rgba(82,39,255,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
                 <Wand2 size={18} />
                 <span>Generate Application</span>
               </Link>
@@ -101,6 +90,5 @@ export function Hero() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }

@@ -1,18 +1,15 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { XCircle, CheckCircle2, ShieldAlert, Sparkles, Layers } from "lucide-react";
-
 export function WhyMorphOS() {
-  return (
-    <section className="py-24 relative overflow-hidden">
+  return <section className="py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-elevated)] border border-[var(--card-border)] text-xs font-semibold text-[var(--accent)]">
             <Sparkles size={14} />
             <span>The MorphOS Paradigm Shift</span>
           </div>
-          <h2 className="text-3xl font-extrabold text-[var(--text-primary)] md:text-5xl tracking-tight">
+          <h2 className="text-[var(--text-primary)] md:text-5xl tracking-tight text-[45px] font-[800]">
             Why MorphOS Displaces Raw Code AI
           </h2>
           <p className="text-base text-[var(--text-secondary)]">
@@ -22,12 +19,15 @@ export function WhyMorphOS() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Traditional Raw Code AI Generation Column */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="rounded-3xl bg-red-500/10 border border-red-500/20 p-8 space-y-6 backdrop-blur-xl"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          x: -20
+        }} whileInView={{
+          opacity: 1,
+          x: 0
+        }} viewport={{
+          once: true
+        }} className="rounded-3xl bg-red-500/10 border border-red-500/20 p-8 space-y-6 backdrop-blur-xl">
             <div className="flex items-center gap-3 border-b border-red-500/20 pb-4">
               <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-500">
                 <ShieldAlert size={20} />
@@ -59,12 +59,15 @@ export function WhyMorphOS() {
           </motion.div>
 
           {/* MorphOS JSON AST Generation Column */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="rounded-3xl bg-[var(--surface-elevated)] border border-[var(--primary)]/30 p-8 space-y-6 backdrop-blur-xl shadow-[0_0_40px_rgba(139,92,246,0.15)] relative overflow-hidden"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          x: 20
+        }} whileInView={{
+          opacity: 1,
+          x: 0
+        }} viewport={{
+          once: true
+        }} className="rounded-3xl bg-[var(--surface-elevated)] border border-[var(--primary)]/30 p-8 space-y-6 backdrop-blur-xl shadow-[0_0_40px_rgba(139,92,246,0.15)] relative overflow-hidden">
             <div className="absolute top-0 right-0 px-4 py-1.5 bg-gradient-to-l from-[var(--primary)] to-[var(--accent)] text-white text-[10px] font-extrabold uppercase tracking-wider rounded-bl-xl">
               LOCKED ARCHITECTURE
             </div>
@@ -100,6 +103,5 @@ export function WhyMorphOS() {
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
