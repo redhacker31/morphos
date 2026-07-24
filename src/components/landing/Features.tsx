@@ -55,7 +55,7 @@ const cardVariants: Variants = {
   }
 };
 export function Features() {
-  return <section id="features" className="py-24 px-6">
+  return <section id="features" className="py-24 px-6 shadow-[0px_4px_16px_0px_#1F5DEEFF]">
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{
         opacity: 0,

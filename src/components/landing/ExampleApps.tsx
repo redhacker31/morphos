@@ -77,7 +77,7 @@ const EXAMPLE_APPS = [{
 export function ExampleApps() {
   const [activeTab, setActiveTab] = useState(EXAMPLE_APPS[0].id);
   const selectedApp = EXAMPLE_APPS.find(app => app.id === activeTab) || EXAMPLE_APPS[0];
-  return <section className="py-24 relative overflow-hidden">
+  return <section className="py-24 relative overflow-hidden shadow-[0px_4px_16px_0px_#C307F7FF] rounded-[17px]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 border-[1px] border-[#B0BFDCFF]">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-elevated)] border border-[var(--card-border)] text-xs font-semibold text-[var(--accent)]">
