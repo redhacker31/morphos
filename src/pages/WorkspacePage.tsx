@@ -125,9 +125,9 @@ export default function WorkspacePage() {
   const ai = useAIGenerator();
   const projectsHook = useProjects(ready);
   const historyHook = usePromptHistory(ready);
-  const cryptoHook = useCryptoPortfolio(ready && activeView === "crypto");
 
   const [activeView, setActiveView] = useState("workspace");
+  const cryptoHook = useCryptoPortfolio(ready && activeView === "crypto");
   const [showUpload, setShowUpload] = useState(false);
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
