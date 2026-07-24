@@ -1,23 +1,24 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Keyboard, Lightbulb, ArrowRight, BookOpen, Rocket } from "lucide-react";
-
 interface EmptyWorkspaceProps {
   onSelectTemplate: (templateId: string) => void;
   onFocusPrompt: () => void;
 }
-
-export function EmptyWorkspace({ onSelectTemplate, onFocusPrompt }: EmptyWorkspaceProps) {
-  return (
-    <div className="w-full max-w-4xl mx-auto space-y-10 py-6">
+export function EmptyWorkspace({
+  onSelectTemplate,
+  onFocusPrompt
+}: EmptyWorkspaceProps) {
+  return <div className="w-full max-w-4xl mx-auto space-y-10 py-6">
       {/* Welcome Hero Banner */}
-      <div className="rounded-3xl bg-gradient-to-br from-[var(--surface-elevated)] via-[var(--surface)] to-[var(--background-secondary)] border border-[var(--card-border)] p-8 text-center space-y-4 relative overflow-hidden shadow-2xl">
-        <motion.div
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/30 border border-[var(--card-border)] mx-auto flex items-center justify-center shadow-[0_0_30px_var(--primary-glow)]"
-        >
+      <div className="rounded-3xl bg-gradient-to-br from-[var(--surface-elevated)] via-[var(--surface)] to-[var(--background-secondary)] p-8 text-center space-y-4 relative overflow-hidden border-[1px] shadow-[0px_25px_50px_0px_#136EF7BD]">
+        <motion.div animate={{
+        scale: [1, 1.05, 1]
+      }} transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }} className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/30 border border-[var(--card-border)] mx-auto flex items-center justify-center shadow-[0_0_30px_var(--primary-glow)]">
           <Sparkles size={24} className="text-[var(--primary)]" />
         </motion.div>
 
@@ -29,10 +30,7 @@ export function EmptyWorkspace({ onSelectTemplate, onFocusPrompt }: EmptyWorkspa
         </p>
 
         <div className="pt-2 flex items-center justify-center gap-3">
-          <button
-            onClick={onFocusPrompt}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white text-xs font-extrabold hover:opacity-90 transition-all flex items-center gap-2 shadow-lg cursor-pointer"
-          >
+          <button onClick={onFocusPrompt} className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white text-xs font-extrabold hover:opacity-90 transition-all flex items-center gap-2 shadow-lg cursor-pointer">
             <Rocket size={14} />
             <span>Start Building with Prompt</span>
           </button>
@@ -89,6 +87,5 @@ export function EmptyWorkspace({ onSelectTemplate, onFocusPrompt }: EmptyWorkspa
           </ul>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
