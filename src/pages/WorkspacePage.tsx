@@ -21,6 +21,7 @@ import { useCryptoPortfolio } from "@/hooks/useCryptoPortfolio";
 import { CryptoBentoDashboard } from "@/components/dashboard/CryptoBentoDashboard";
 import { supabase } from "@/integrations/supabase/client";
 import { mockTemplates } from "@/lib/mock-data";
+import { injectFileData, type ParsedFile } from "@/lib/fileParser";
 import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Layers, Play, Eye, AlertCircle, X } from "lucide-react";
@@ -216,20 +217,23 @@ export default function WorkspacePage() {
         <span className="text-xs text-[var(--text-muted)]">Preparing your workspace...</span>
       </div>;
   }
-  const handleGenerate = async (promptText: string) => {
+  const handleGenerate = async (promptText: string, parsed?: ParsedFile) => {
     const res = await ai.generate(promptText);
     if (res.success && res.ast) {
       setGenError(null);
-      setActiveAst(res.ast);
+      // Inject real file data into the generated AST so the dashboard reflects
+      // the uploaded spreadsheet (table rows + chart from a numeric column).
+      const ast = parsed ? injectFileData(res.ast, parsed) : res.ast;
+      setActiveAst(ast);
       setShowRendererDemo(true);
       // Persist the generated app + prompt (ownership is set server-side).
       try {
         await projectsHook.createProject({
-          title: res.ast.meta.title,
+          title: ast.meta.title,
           prompt: promptText,
-          ast: res.ast,
+          ast,
           domain: res.requirements?.domain ?? null,
-          node_count: res.ast.nodes.length
+          node_count: ast.nodes.length
         });
       } catch (e) {
         console.warn("Failed to save project", e);
@@ -242,6 +246,15 @@ export default function WorkspacePage() {
     } else {
       setGenError(res.errors[0] || "Generation failed. Please try again.");
     }
+  };
+  const handleFileParsed = (result: ParsedFile) => {
+    setShowUpload(false);
+    const basePrompt = result.fileType === "spreadsheet"
+      ? `Build an analytics dashboard from this uploaded spreadsheet. Use the provided columns and sample rows verbatim for the data table, and chart the numeric column "${result.numericColumns[0] ?? ""}". Include a hero banner, KPI metric cards, a bar chart, and a data table.`
+      : `Build an analytics dashboard summarizing this uploaded PDF document. Include a hero banner, KPI metric cards, a bar chart, and a data table.`;
+    const promptText = `${basePrompt}\n\n${result.summary}`;
+    setPrompt(promptText);
+    void handleGenerate(promptText, result);
   };
   const handleSelectTemplate = (templateId: string) => {
     setShowTemplatesModal(false);
@@ -329,7 +342,7 @@ export default function WorkspacePage() {
               opacity: 0,
               height: 0
             }} className="w-full">
-                    <FileUpload isOpen={showUpload} onClose={() => setShowUpload(false)} />
+                    <FileUpload isOpen={showUpload} onClose={() => setShowUpload(false)} onParsed={handleFileParsed} />
                   </motion.div>}
               </AnimatePresence>
 

@@ -30,6 +30,7 @@
     "framer-motion": "^11.18.0",
     "globals": "^17.7.0",
     "lucide-react": "^0.460.0",
+    "pdfjs-dist": "^6.1.200",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.28.0",
@@ -37,6 +38,7 @@
     "tailwind-merge": "^2.5.0",
     "three": "^0.185.1",
     "vite-plugin-enter-dev": "^0.0.8",
+    "xlsx": "^0.18.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
