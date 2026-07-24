@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, User, Send, Sparkles, X, AlertCircle } from "lucide-react";
+import { Bot, User, Send, Sparkles, X, AlertCircle, Loader2, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useSession";
 import { sb } from "@/lib/db";
+import { ASTRepairEngine } from "@/features/ai-generator/pipeline/astRepairEngine";
+import type { AppASTPayload } from "@/features/renderer/schema/astSchema";
 
 interface ChatMessage {
   id: string;
@@ -13,13 +15,22 @@ interface ChatMessage {
   content: string;
   timestamp: string;
   streaming?: boolean;
+  applied?: boolean;
 }
 
-const WELCOME: ChatMessage = {
+const WELCOME_EDIT: ChatMessage = {
   id: "welcome",
   role: "ai",
   content:
-    "Welcome to MorphOS! Describe the app you want to build and I'll help you plan it. Try: \"A sales CRM dashboard with revenue KPIs, a pipeline chart, and a deals table.\"",
+    "I'm your dashboard editor. Tell me what to change and I'll update it live — e.g. \"add a pie chart for market distribution\", \"change the bar chart to monthly revenue\", or \"rename the first metric to Total Revenue\".",
+  timestamp: "Just now",
+};
+
+const WELCOME_PLAN: ChatMessage = {
+  id: "welcome",
+  role: "ai",
+  content:
+    "Welcome to MorphOS! Describe the app you want to build and I'll help you plan it. Generate a dashboard first, then I can edit it from here. Try: \"A sales CRM dashboard with revenue KPIs, a pipeline chart, and a deals table.\"",
   timestamp: "Just now",
 };
 
@@ -37,11 +48,14 @@ function relTime(iso?: string): string {
 interface ChatPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  currentAst?: AppASTPayload | null;
+  onUpdateAst?: (ast: AppASTPayload, instruction: string) => void;
 }
 
-export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
+export default function ChatPanel({ isOpen, onClose, currentAst, onUpdateAst }: ChatPanelProps) {
   const { ready } = useSession();
-  const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
+  const editMode = !!(currentAst && onUpdateAst);
+  const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_PLAN]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +64,15 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
     `morphos-${Math.random().toString(36).slice(2)}`
   );
   const abortRef = useRef<AbortController | null>(null);
+
+  // Switch the welcome message when entering edit mode.
+  useEffect(() => {
+    setMessages((prev) => {
+      const hasOnlyWelcome = prev.length === 1 && prev[0].id === "welcome";
+      if (!hasOnlyWelcome) return prev;
+      return [editMode ? WELCOME_EDIT : WELCOME_PLAN];
+    });
+  }, [editMode]);
 
   // Load conversation history from the backend.
   useEffect(() => {
@@ -79,39 +102,76 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
     }
   }, [messages, isTyping]);
 
-  const handleSend = async () => {
-    const text = input.trim();
-    if (!text || isTyping) return;
-    setInput("");
+  /** Edit mode: regenerate the dashboard AST from the instruction. */
+  const handleUpdate = async (text: string) => {
+    const aiId = `a-${Date.now()}`;
+    setMessages((prev) => [
+      ...prev,
+      { id: aiId, role: "ai", content: "Updating your dashboard…", timestamp: "Just now", streaming: true },
+    ]);
+    setIsTyping(true);
     setError(null);
 
-    const userMsg: ChatMessage = {
-      id: `u-${Date.now()}`,
-      role: "user",
-      content: text,
-      timestamp: "Just now",
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    // Persist the user's message (ownership set server-side by trigger).
-    void sb.from("chat_messages").insert({ role: "user", content: text });
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/update-dashboard`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ ast: currentAst, instruction: text }),
+      });
+      const data = await res.json().catch(() => null);
 
+      if (!res.ok || !data?.success || !data?.ast) {
+        const msg = data?.errors?.[0] || `Update failed (HTTP ${res.status}).`;
+        throw new Error(msg);
+      }
+
+      const repair = ASTRepairEngine.repair(data.ast);
+      const updatedAst: AppASTPayload =
+        repair.success && repair.ast ? repair.ast : (data.ast as AppASTPayload);
+
+      onUpdateAst?.(updatedAst, text);
+
+      await sb.from("chat_messages").insert({
+        role: "ai",
+        content: `Dashboard updated: ${text}`,
+      });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === aiId
+            ? {
+                ...m,
+                content: `Done — I've updated your dashboard based on "${text}". The changes are live in the preview.`,
+                streaming: false,
+                applied: true,
+                timestamp: "Just now",
+              }
+            : m
+        )
+      );
+    } catch (e: any) {
+      setMessages((prev) => prev.filter((m) => m.id !== aiId));
+      setError(e?.message || "Failed to update the dashboard.");
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  /** Plan mode: streaming brainstorm chat. */
+  const handleChat = async (text: string, history: ChatMessage[], userMsg: ChatMessage) => {
     const aiId = `a-${Date.now()}`;
-    const aiMsg: ChatMessage = {
-      id: aiId,
-      role: "ai",
-      content: "",
-      timestamp: "Just now",
-      streaming: true,
-    };
-    setMessages((prev) => [...prev, aiMsg]);
+    setMessages((prev) => [
+      ...prev,
+      { id: aiId, role: "ai", content: "", timestamp: "Just now", streaming: true },
+    ]);
     setIsTyping(true);
 
-    const history = [...messages.filter((m) => m.id !== "welcome"), userMsg].map(
-      (m) => ({
-        role: m.role === "ai" ? "assistant" : "user",
-        content: m.content,
-      })
-    );
+    const convo = [...history.filter((m) => m.id !== "welcome"), userMsg].map((m) => ({
+      role: m.role === "ai" ? "assistant" : "user",
+      content: m.content,
+    }));
 
     abortRef.current = new AbortController();
     let acc = "";
@@ -123,7 +183,7 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
           Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
           "X-Session-ID": sessionIdRef.current,
         },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: convo }),
         signal: abortRef.current.signal,
         openWhenHidden: true,
 
@@ -198,6 +258,28 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
     }
   };
 
+  const handleSend = async () => {
+    const text = input.trim();
+    if (!text || isTyping) return;
+    setInput("");
+    setError(null);
+
+    const userMsg: ChatMessage = {
+      id: `u-${Date.now()}`,
+      role: "user",
+      content: text,
+      timestamp: "Just now",
+    };
+    setMessages((prev) => [...prev, userMsg]);
+    await sb.from("chat_messages").insert({ role: "user", content: text });
+
+    if (editMode) {
+      await handleUpdate(text);
+    } else {
+      await handleChat(text, messages, userMsg);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -215,8 +297,16 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                 <Sparkles size={14} className="text-[var(--primary)]" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-semibold">MorphOS Copilot</span>
-                <span className="text-[10px] text-[var(--text-muted)]">Powered by GPT 5.6 Luna</span>
+                <span className="text-sm font-semibold text-[var(--text-primary)]">MorphOS Copilot</span>
+                <span className="text-[10px] text-[var(--text-muted)] flex items-center gap-1">
+                  {editMode ? (
+                    <>
+                      <LayoutDashboard size={10} /> Editing live dashboard
+                    </>
+                  ) : (
+                    "Powered by GPT 5.6 Luna"
+                  )}
+                </span>
               </div>
             </div>
             <button
@@ -251,7 +341,11 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                   )}
                 >
                   {msg.role === "ai" ? (
-                    <Bot size={14} className="text-[var(--primary)]" />
+                    msg.applied ? (
+                      <LayoutDashboard size={14} className="text-[var(--success)]" />
+                    ) : (
+                      <Bot size={14} className="text-[var(--primary)]" />
+                    )
                   ) : (
                     <User size={14} className="text-[var(--accent)]" />
                   )}
@@ -263,7 +357,9 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                     className={cn(
                       "px-3.5 py-2.5 rounded-xl text-sm leading-relaxed whitespace-pre-wrap break-words",
                       msg.role === "ai"
-                        ? "bg-[var(--card)] border border-[var(--card-border)] rounded-tl-sm"
+                        ? msg.applied
+                          ? "bg-[var(--success)]/10 border border-[var(--success)]/30 rounded-tl-sm"
+                          : "bg-[var(--card)] border border-[var(--card-border)] rounded-tl-sm"
                         : "bg-[var(--primary)] text-white rounded-tr-sm"
                     )}
                   >
@@ -304,7 +400,7 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleSend();
                 }}
-                placeholder="Ask AI to modify..."
+                placeholder={editMode ? "Describe a change to the dashboard…" : "Ask AI to plan your app…"}
                 disabled={isTyping}
                 className="flex-1 bg-[var(--card)] border border-[var(--card-border)] px-4 py-2.5 rounded-xl text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--primary)]/50 transition-colors disabled:opacity-50"
                 aria-label="Chat message"
@@ -315,7 +411,7 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                 className="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
                 aria-label="Send message"
               >
-                <Send size={16} />
+                {isTyping ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
               </button>
             </div>
           </div>

@@ -275,6 +275,23 @@ export default function WorkspacePage() {
     setShowRendererDemo(true);
     setActiveView("workspace");
   };
+  // Copilot edits the live dashboard: update the AST and persist it to the
+  // most recent project (if any). Ownership stays server-side (RLS).
+  const handleUpdateAst = (ast: AppASTPayload, instruction: string) => {
+    setActiveAst(ast);
+    setShowRendererDemo(true);
+    const latestId = projectsHook.projects[0]?.id;
+    if (latestId) {
+      void projectsHook.updateProject(latestId, {
+        ast,
+        title: ast.meta?.title,
+        node_count: ast.nodes.length,
+      }).catch((e: unknown) => console.warn("Failed to persist dashboard update", e));
+    }
+    void historyHook.addPrompt(`Update dashboard: ${instruction}`).catch((e: unknown) =>
+      console.warn("Failed to save prompt", e)
+    );
+  };
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     window.location.reload();
@@ -395,7 +412,7 @@ export default function WorkspacePage() {
         </WorkspaceSurface>
 
         {/* Copilot Chat Panel */}
-        <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+        <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} currentAst={activeAst} onUpdateAst={handleUpdateAst} />
       </div>
 
       {/* Floating Copilot FAB */}
